@@ -1,0 +1,156 @@
+package fr.summumgames.launcher;
+
+import fr.summumgames.launcher.ui.PanelManager;
+import fr.summumgames.launcher.ui.panels.pages.App;
+import fr.summumgames.launcher.ui.panels.pages.Login;
+import fr.summumgames.launcher.utils.Constants;
+import fr.flowarg.flowlogger.ILogger;
+import fr.flowarg.flowlogger.Logger;
+import fr.litarvan.openauth.AuthPoints;
+import fr.litarvan.openauth.AuthenticationException;
+import fr.litarvan.openauth.Authenticator;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
+import fr.litarvan.openauth.model.response.RefreshResponse;
+import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
+import fr.theshark34.openlauncherlib.minecraft.util.GameDirGenerator;
+import fr.theshark34.openlauncherlib.util.Saver;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+
+
+public class Launcher extends Application {
+    private PanelManager panelManager;
+    public static Launcher instance;
+    private final ILogger logger;
+    private final Path launcherDir = GameDirGenerator.createGameDir(Constants.LAUNCHER_NAME, false);
+    private final Path skyblockDir = Paths.get(String.valueOf(launcherDir), "SkyBlock");
+    private final Path survivalDir = Paths.get(String.valueOf(launcherDir), "Survival");
+    private final Path apocalypseDir = Paths.get(String.valueOf(launcherDir), "Apocalypse");
+    private final Path oneblockDir = Paths.get(String.valueOf(launcherDir), "OneBlock");
+    private final Path minigamesDir = Paths.get(String.valueOf(launcherDir), "MiniGames");
+    private final Saver saver;
+
+    private AuthInfos authInfos = null;
+
+    public Launcher() {
+        instance = this;
+        this.logger = new Logger("[SummumGamesLauncher]", Paths.get(this.launcherDir.toString(), "launcher.log"));
+        if (!this.launcherDir.toFile().exists()) {
+            if (!this.launcherDir.toFile().mkdir()) {
+                this.logger.err("Unable to create launcher folder");
+            }
+        }
+
+        saver = new Saver(Paths.get(launcherDir.toString(), "config.properties"));
+
+        saver.load();
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        this.logger.info("Starting Launcher");
+        this.panelManager = new PanelManager(this, stage);
+        this.panelManager.init();
+
+        if (this.isUserAlreadyLoggedIn()) {
+            logger.info("Hello" + " " + authInfos.getUsername() + " !");
+            panelManager.showPanel(new App());
+        }else {
+            this.panelManager.showPanel(new Login());
+        }
+    }
+
+    public boolean isUserAlreadyLoggedIn() {
+        if (saver.get("msAccessToken") != null && saver.get("msRefreshToken") != null) {
+
+            try {
+                MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
+                MicrosoftAuthResult response = authenticator.loginWithRefreshToken(saver.get("msRefreshToken"));
+
+                saver.set("msAccessToken", response.getAccessToken());
+                saver.set("msRefreshToken", response.getRefreshToken());
+                saver.save();
+
+                this.setAuthInfos(new AuthInfos(
+                        response.getProfile().getName(),
+                        response.getAccessToken(),
+                        response.getProfile().getId()
+                ));
+
+                return true;
+
+            } catch (MicrosoftAuthenticationException e) {
+                saver.remove("msAccessToken");
+                saver.remove("msRefreshToken");
+                saver.save();
+            }
+
+        }else if (saver.get("offline-username") != null) {
+            this.authInfos = new AuthInfos(saver.get("offline-username"), UUID.randomUUID().toString(), UUID.randomUUID().toString());
+            return true;
+        }
+
+        return false;
+    }
+
+    public void setAuthInfos(AuthInfos authInfos) {
+        this.authInfos = authInfos;
+    }
+
+    public AuthInfos getAuthInfos() {
+        return authInfos;
+    }
+
+    public ILogger getLogger() {
+        return logger;
+    }
+
+    public static Launcher getInstance()     {
+        return instance;
+    }
+
+    public Saver getSaver() {
+        return saver;
+    }
+
+    public Path getLauncherDir() {
+        return launcherDir;
+    }
+
+    public Path getSkyblockDir() {
+        return skyblockDir;
+    }
+
+    public Path getSurvivalDir() {
+        return survivalDir;
+    }
+
+    public Path getApocalypseDir() {
+        return apocalypseDir;
+    }
+
+    public Path getOneblockDir() {
+        return oneblockDir;
+    }
+
+    public Path getMinigamesDir() {
+        return minigamesDir;
+    }
+
+    public void Stop() {
+        Platform.exit();
+        System.exit(0);
+    }
+
+    public void hideWindow() {
+        this.panelManager.getStage().hide();
+    }
+
+}

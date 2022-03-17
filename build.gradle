@@ -1,0 +1,41 @@
+plugins {
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'java'
+    id 'application'
+}
+
+group 'fr.summumgames.launcher'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://jitpack.io/'
+        name = 'JitPack'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: '*.jar')
+
+    implementation 'de.jensd:fontawesomefx:8+'
+
+    implementation 'fr.flowarg:flowupdater:1.5+'
+    implementation 'fr.flowarg:openlauncherlib:3+'
+
+    implementation 'com.github.goxr3plus:FX-BorderlessScene:4+'
+    implementation 'com.github.oshi:oshi-core:5+'
+
+    implementation group: 'org.json', name: 'json', version: '20211205'
+}
+
+application {
+    getMainClass().set('fr.summumgames.launcher.Main')
+}
+
+compileJava {
+    options.encoding = "UTF-8"
+}
