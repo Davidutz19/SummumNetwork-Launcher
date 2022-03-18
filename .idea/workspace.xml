@@ -4,9 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce9c91a3-6aa8-4692-9922-ae8e69b77f7b" name="Default Changelist" comment="">
+    <list default="true" id="ce9c91a3-6aa8-4692-9922-ae8e69b77f7b" name="Default Changelist" comment="Modified login system and added mineweb auth">
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/auth/AuthMicrosoft.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/auth/AuthMineweb.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/auth/AuthMicrosoft.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/auth/AuthMineweb.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.0/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.0/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.0/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/Launcher.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/Launcher.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/ui/panels/pages/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/ui/panels/pages/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/ui/panels/pages/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/ui/panels/pages/Login.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/utils/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/fr/summumgames/launcher/utils/Constants.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/Launcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/game/MinecraftLaunching.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/game/MinecraftLaunching.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/ui/panels/pages/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/ui/panels/pages/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/ui/panels/pages/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/ui/panels/pages/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/summumgames/launcher/utils/Constants.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,6 +113,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first comit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first comit" />
+    <MESSAGE value="Modified login system and added mineweb auth" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified login system and added mineweb auth" />
   </component>
 </project>

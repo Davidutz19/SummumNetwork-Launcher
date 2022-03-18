@@ -855,7 +855,7 @@ public class App extends Panel {
         logoutIcon.setSize("18px");
         logoutIcon.setFill(Color.rgb(255, 101, 0));
         logoutButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
-        logoutButton.setTranslateY(-10);
+        logoutButton.setTranslateY(-5);
         logoutButton.setTranslateX(-5);
         setBottom(logoutButton);
         setRight(logoutButton);

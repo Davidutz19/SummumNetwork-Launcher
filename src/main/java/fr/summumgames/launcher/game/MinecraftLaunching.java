@@ -68,7 +68,7 @@ public class MinecraftLaunching {
                     minecraftInfos.GAME_VERSION,
                     "20210115.111550"
             );
-            minecraftInfos.CURSE_MODS_LIST_URL = "https://summumgames.000webhostapp.com/Mods/mods-list-sgkyblock.json";
+            minecraftInfos.CURSE_MODS_LIST_URL = "https://summumgames.000webhostapp.com/Mods/mods-list-skyblock.json";
             minecraftInfos.MODS_LIST_URL = "https://summumgames.000webhostapp.com/Mods/mods-list-skyblock.json";
             play(pane);
         }

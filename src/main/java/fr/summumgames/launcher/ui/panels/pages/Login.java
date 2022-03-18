@@ -3,6 +3,8 @@ package fr.summumgames.launcher.ui.panels.pages;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import fr.summumgames.launcher.Launcher;
+import fr.summumgames.launcher.auth.AuthMicrosoft;
+import fr.summumgames.launcher.auth.AuthMineweb;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panel.Panel;
 import fr.litarvan.openauth.AuthPoints;
@@ -11,6 +13,7 @@ import fr.litarvan.openauth.Authenticator;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import fr.litarvan.openauth.model.AuthAgent;
 import fr.litarvan.openauth.model.response.AuthResponse;
+import fr.summumgames.launcher.utils.Constants;
 import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.geometry.HPos;
@@ -40,6 +43,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Login extends Panel {
 
     Saver saver = Launcher.getInstance().getSaver();
+
+    AuthMicrosoft authMicrosoft = new AuthMicrosoft();
+    AuthMineweb authMineweb = new AuthMineweb();
+
     AtomicBoolean connectWithMicrosoft = new AtomicBoolean(true);
 
     @Override
@@ -208,7 +215,11 @@ public class Login extends Panel {
         forgotPassword.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         forgotPassword.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         forgotPassword.setOnMouseClicked(e -> {
-            openURL("https://www.minecraft.net/fr-fr/password/forgot");
+            if (connectWithMicrosoft.get()) {
+                openURL("https://account.live.com/ResetPassword.aspx");
+            } else {
+                openURL(Constants.WEB_URL + "login");
+            }
         });
 
         Label errorLabel = new Label("");
@@ -236,13 +247,21 @@ public class Login extends Panel {
                 if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                     errorLabel.setText("Champ Incomplet");
                 } else {
-                    this.authenticate(usernameField.getText(), passwordField.getText(), errorLabel);
+                   authMicrosoft.login(usernameField.getText(), passwordField.getText(), errorLabel);
+                    if (authMicrosoft.isConnected()) {
+                        logger.info("Hello " + Launcher.getInstance().getAuthInfos().getUsername() + " !");
+                        panelManager.showPanel(new App());
+                    }
                 }
             } else {
-                if (usernameField.getText().isEmpty()) {
+                if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                     errorLabel.setText("Champ Incomplet");
                 } else {
-                    authenticate(usernameField.getText(), null, errorLabel);
+                    authMineweb.login(usernameField.getText(), passwordField.getText());
+                    if (authMineweb.isConnected()){
+                        logger.info("Hello " + Launcher.getInstance().getAuthInfos().getUsername() + " !");
+                        panelManager.showPanel(new App());
+                    }
                 }
             }
         });
@@ -268,10 +287,12 @@ public class Login extends Panel {
         Image logoImageMicrosoft = new Image("/images/Microsoft.png");
         ImageView imageViewMicrosoft = new ImageView(logoImageMicrosoft);
 
-        Image logoImageCrack = new Image("/images/Crack.png");
-        ImageView imageViewCrack = new ImageView(logoImageCrack);
+        Image logoImageServer = new Image("/images/icon.png");
+        ImageView imageViewServer = new ImageView(logoImageServer);
+        imageViewServer.setFitHeight(34d);
+        imageViewServer.setPreserveRatio(true);
 
-        Button microsoftButton = new Button("Connection en Crack");
+        Button microsoftButton = new Button("SummumNetwork");
         GridPane.setVgrow(microsoftButton, Priority.ALWAYS);
         GridPane.setHgrow(microsoftButton, Priority.ALWAYS);
         GridPane.setValignment(microsoftButton, VPos.CENTER);
@@ -282,27 +303,25 @@ public class Login extends Panel {
         microsoftButton.setMinHeight(47);
         microsoftButton.setFont(Font.font("Consolas", FontWeight.THIN, FontPosture.REGULAR, 14f));
         microsoftButton.setStyle("-fx-background-color: #34aa2f; -fx-border-radius: 0px; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
-        microsoftButton.setGraphic(imageViewCrack);
+        microsoftButton.setGraphic(imageViewServer);
         microsoftButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         microsoftButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         microsoftButton.setOnMouseClicked(e -> {
             if (connectWithMicrosoft.get()) {
                 connectWithMicrosoft.set(false);
-                usernameLabel.setText("Nom d'utilisateur");
                 microsoftButton.setGraphic(imageViewMicrosoft);
                 microsoftButton.setText("Microsoft");
-                passwordField.setDisable(true);
-                passwordLabel.setText("");
+                usernameLabel.setText("Nom d'utilisateur");
+                usernameField.setText("");
                 passwordField.setText("");
-                forgotPassword.setDisable(true);
             }else {
                 connectWithMicrosoft.set(true);
+                microsoftButton.setGraphic(imageViewServer);
+                microsoftButton.setText("SummumNetwork");
                 usernameLabel.setText("Adresse mail");
-                microsoftButton.setGraphic(imageViewCrack);
-                microsoftButton.setText("Connexion en Crack");
-                passwordField.setDisable(false);
+                usernameField.setText("");
                 passwordLabel.setText("Mot de passe");
-                forgotPassword.setDisable(false);
+                passwordField.setText("");
             }
         });
 
@@ -336,7 +355,7 @@ public class Login extends Panel {
 
                 panelManager.showPanel(new App());
             } catch (MicrosoftAuthenticationException e) {
-                error.setText("Une erreur est survenue lors de la connexion au serveur ");
+                error.setText("Adresse mail ou mot de passe invalide");
                 return;
             }
         }else {

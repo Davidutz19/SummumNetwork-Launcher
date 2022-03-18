@@ -41,7 +41,7 @@ public class Launcher extends Application {
 
     public Launcher() {
         instance = this;
-        this.logger = new Logger("[SummumGamesLauncher]", Paths.get(this.launcherDir.toString(), "launcher.log"));
+        this.logger = new Logger("[SummumNetworkLauncher]", Paths.get(this.launcherDir.toString(), "launcher.log"));
         if (!this.launcherDir.toFile().exists()) {
             if (!this.launcherDir.toFile().mkdir()) {
                 this.logger.err("Unable to create launcher folder");
