@@ -85,7 +85,7 @@ public class Login extends Panel {
 
         setCanTakeAllSize(backgroundImage);
         backgroundImage.getStyleClass().add("background-image");
-        backgroundImage.setStyle("-fx-background-image: url(images/background.jpg);");
+        backgroundImage.setStyle("-fx-background-image: url(images/background-login.jpg);");
         this.layout.add(backgroundImage, 0, 0);
 
         loginPanel.setMaxWidth(400);
@@ -125,7 +125,7 @@ public class Login extends Panel {
         GridPane.setHgrow(registerHere, Priority.ALWAYS);
         GridPane.setValignment(registerHere, VPos.BOTTOM);
         GridPane.setHalignment(registerHere, HPos.CENTER);
-        registerHere.setStyle("-fx-text-fill: #ff6500; -fx-font-size: 14px;");
+        registerHere.setStyle("-fx-text-fill: #B8412D; -fx-font-size: 14px;");
         registerHere.setUnderline(true);
         registerHere.setTranslateY(-10);
         registerHere.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
@@ -225,7 +225,7 @@ public class Login extends Panel {
         GridPane.setHgrow(forgotPassword, Priority.ALWAYS);
         GridPane.setValignment(forgotPassword, VPos.CENTER);
         GridPane.setHalignment(forgotPassword, HPos.LEFT);
-        forgotPassword.setStyle("-fx-text-fill: #ff6500; -fx-font-size: 12px;");
+        forgotPassword.setStyle("-fx-text-fill: #B8412D; -fx-font-size: 12px;");
         forgotPassword.setUnderline(true);
         forgotPassword.setTranslateX(37.5);
         forgotPassword.setTranslateY(30);
@@ -256,7 +256,7 @@ public class Login extends Panel {
         conectionButton.setTranslateY(100);
         conectionButton.setMinWidth(325);
         conectionButton.setMinHeight(50);
-        conectionButton.setStyle("-fx-background-color: #ff6500; -fx-border-radius: 0px; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
+        conectionButton.setStyle("-fx-background-color: #B8412D; -fx-border-radius: 0px; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
         conectionButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         conectionButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         conectionButton.setOnMouseClicked(e -> {
@@ -317,7 +317,7 @@ public class Login extends Panel {
         imageViewServer.setFitHeight(34d);
         imageViewServer.setPreserveRatio(true);
 
-        Button microsoftButton = new Button("SummumNetwork");
+        Button microsoftButton = new Button("Microsoft");
         GridPane.setVgrow(microsoftButton, Priority.ALWAYS);
         GridPane.setHgrow(microsoftButton, Priority.ALWAYS);
         GridPane.setValignment(microsoftButton, VPos.CENTER);
@@ -327,25 +327,25 @@ public class Login extends Panel {
         microsoftButton.setMinWidth(190);
         microsoftButton.setMinHeight(47);
         microsoftButton.setFont(Font.font("Consolas", FontWeight.THIN, FontPosture.REGULAR, 14f));
-        microsoftButton.setStyle("-fx-background-color: #34aa2f; -fx-border-radius: 0px; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
-        microsoftButton.setGraphic(imageViewServer);
+        microsoftButton.setStyle("-fx-background-color: #B8412D; -fx-border-radius: 0px; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
+        microsoftButton.setGraphic(imageViewMicrosoft);
         microsoftButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         microsoftButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         microsoftButton.setOnMouseClicked(e -> {
             if (connectWithMicrosoft.get()) {
                 connectWithMicrosoft.set(false);
-                microsoftButton.setGraphic(imageViewMicrosoft);
-                microsoftButton.setText("Microsoft");
+                microsoftButton.setGraphic(imageViewServer);
+                microsoftButton.setText("SummumNetwork");
                 usernameLabel.setText("Nom d'utilisateur");
                 usernameField.setText("");
+                passwordLabel.setText("Mot de passe");
                 passwordField.setText("");
             }else {
                 connectWithMicrosoft.set(true);
-                microsoftButton.setGraphic(imageViewServer);
-                microsoftButton.setText("SummumNetwork");
+                microsoftButton.setGraphic(imageViewMicrosoft);
+                microsoftButton.setText("Microsoft");
                 usernameLabel.setText("Adresse mail");
                 usernameField.setText("");
-                passwordLabel.setText("Mot de passe");
                 passwordField.setText("");
             }
         });

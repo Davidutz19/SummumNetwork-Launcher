@@ -1,6 +1,5 @@
 package fr.summumgames.launcher.ui.panels.pages;
 
-import com.sun.webkit.WebPage;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import fr.summumgames.launcher.Launcher;
@@ -9,47 +8,19 @@ import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panel.Panel;
 import fr.summumgames.launcher.utils.Constants;
-import fr.flowarg.flowupdater.FlowUpdater;
-import fr.flowarg.flowupdater.download.IProgressCallback;
-import fr.flowarg.flowupdater.download.Step;
-import fr.flowarg.flowupdater.download.json.CurseFileInfo;
-import fr.flowarg.flowupdater.download.json.Mod;
-import fr.flowarg.flowupdater.download.json.OptiFineInfo;
-import fr.flowarg.flowupdater.utils.ModFileDeleter;
-import fr.flowarg.flowupdater.utils.UpdaterOptions;
-import fr.flowarg.flowupdater.versions.AbstractForgeVersion;
-import fr.flowarg.flowupdater.versions.ForgeVersionBuilder;
-import fr.flowarg.flowupdater.versions.VanillaVersion;
-import fr.theshark34.openlauncherlib.external.ExternalLaunchProfile;
-import fr.theshark34.openlauncherlib.external.ExternalLauncher;
-import fr.theshark34.openlauncherlib.minecraft.*;
 import fr.theshark34.openlauncherlib.util.Saver;
-import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
-
-import javax.swing.*;
-import java.io.File;
-import java.lang.reflect.Field;
-import java.nio.file.Path;
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -69,6 +40,7 @@ public class App extends Panel {
     private GridPane centerPane = new GridPane();
     private GridPane appPane = new GridPane();
     private GridPane topPanel = new GridPane();
+    private GridPane backgroundImage = new GridPane();
 
     private String showedMenu;
 
@@ -77,8 +49,6 @@ public class App extends Panel {
     ProgressBar progressBar = new ProgressBar();
     Label stepLabel = new Label();
     boolean isDownloading = false;
-
-    MinecraftInfos minecraftInfos = new MinecraftInfos();
 
     @Override
     public String getName() {
@@ -94,11 +64,8 @@ public class App extends Panel {
     public void init(PanelManager panelManager) {
         super.init(panelManager);
 
-        GridPane backgroundImage = new GridPane();
-
         setCanTakeAllSize(backgroundImage);
         backgroundImage.getStyleClass().add("background-image");
-        backgroundImage.setStyle("-fx-background-image: url(images/background.jpg);");
         this.layout.add(backgroundImage, 0, 0);
 
         ColumnConstraints menuPainContraint = new ColumnConstraints();
@@ -169,6 +136,9 @@ public class App extends Panel {
 
     private void showSkyblockMenu(GridPane pane) {
         showedMenu = "skyblock";
+        this.onShow();
+
+        backgroundImage.setStyle("-fx-background-image: url(images/background-skyblock.jpg);");
 
         ImageView imgView = new ImageView();
         Image img = new Image("images/TempoSky.png");
@@ -193,38 +163,6 @@ public class App extends Panel {
         title.setTranslateY(30);
         title.setTranslateX(50);
 
-        GridPane trailer = new GridPane();
-        GridPane.setVgrow(trailer, Priority.ALWAYS);
-        GridPane.setHgrow(trailer, Priority.ALWAYS);
-        GridPane.setValignment(trailer, VPos.CENTER);
-        GridPane.setHalignment(trailer, HPos.CENTER);
-        trailer.setMinWidth(720);
-        trailer.setMaxWidth(720);
-        trailer.setMinHeight(480);
-        trailer.setMaxHeight(480);
-        trailer.setTranslateY(130);
-        String content_url = Constants.TRAILER_CONTENT_SKYBLOCK;
-        WebView webView = new WebView();
-        webView.setStyle("overflow-x: hidden; overflow-y: hidden");
-        WebEngine webEngine = webView.getEngine();
-        webEngine.loadContent(content_url);
-        trailer.getChildren().add(webView);
-        webView.getChildrenUnmodifiable().addListener((ListChangeListener<Node>) change -> {
-            Set<Node> deadSeaScroll = webView.lookupAll(".scroll-bar");
-            for (Node scroll : deadSeaScroll) {
-                scroll.setVisible(false);
-            }
-        });
-
-        try {
-            Field field = webEngine.getClass().getDeclaredField("page");
-            field.setAccessible(true);
-            WebPage page = (WebPage)field.get(webEngine);
-            SwingUtilities.invokeLater(() -> page.setBackgroundColor(new java.awt.Color(255, 255, 255, 0).getRGB()));
-        } catch (Exception e) {
-            logger.err("Unable to show trailer: " + e.getMessage());
-        }
-
         Button playButton = new Button("Jouer");
         GridPane.setVgrow(playButton, Priority.ALWAYS);
         GridPane.setHgrow(playButton, Priority.ALWAYS);
@@ -233,7 +171,7 @@ public class App extends Panel {
         playButton.setTranslateY(200);
         playButton.setMinWidth(140);
         playButton.setMaxHeight(40);
-        playButton.setStyle("-fx-background-color: #ff6500; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
+        playButton.setStyle("-fx-background-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
         playButton.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
         playButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         playButton.setOnMouseClicked(e -> {
@@ -248,8 +186,8 @@ public class App extends Panel {
         GridPane.setHalignment(settingsButton, HPos.CENTER);
         MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.SETTINGS);
         settingsIcon.setSize("18px");
-        settingsIcon.setFill(Color.rgb(255, 101, 0));
-        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
+        settingsIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
+        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color:" + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
         settingsButton.setTranslateX(88);
         settingsButton.setTranslateY(194);
         settingsButton.setMinWidth(26);
@@ -267,7 +205,7 @@ public class App extends Panel {
             showSettingsMenu(pane);
         });
 
-        progressBar.setStyle("-fx-background-color: rgba(255, 101, 0);");
+        progressBar.setStyle("-fx-background-color: rgb(184, 65, 45);");
         progressBar.setMinWidth(450);
         setBottom(progressBar);
         setCenterH(progressBar);
@@ -279,11 +217,14 @@ public class App extends Panel {
         setCenterH(stepLabel);
         stepLabel.setTranslateY(242);
 
-        pane.getChildren().addAll(title, imgView, trailer, playButton, settingsButton);
+        pane.getChildren().addAll(title, imgView, playButton, settingsButton);
     }
 
     private void showSurvivalMenu(GridPane pane) {
         showedMenu = "survival";
+        this.onShow();
+
+        backgroundImage.setStyle("-fx-background-image: url(images/background2.jpg);");
 
         ImageView imgView = new ImageView();
         Image img = new Image("images/TempoSurvival.png");
@@ -308,38 +249,6 @@ public class App extends Panel {
         title.setTranslateY(30);
         title.setTranslateX(35);
 
-        GridPane trailer = new GridPane();
-        GridPane.setVgrow(trailer, Priority.ALWAYS);
-        GridPane.setHgrow(trailer, Priority.ALWAYS);
-        GridPane.setValignment(trailer, VPos.CENTER);
-        GridPane.setHalignment(trailer, HPos.CENTER);
-        trailer.setMinWidth(720);
-        trailer.setMaxWidth(720);
-        trailer.setMinHeight(480);
-        trailer.setMaxHeight(480);
-        trailer.setTranslateY(130);
-        String content_url = Constants.TRAILER_CONTENT_SURVIVAL;
-        WebView webView = new WebView();
-        webView.setStyle("overflow-x: hidden; overflow-y: hidden");
-        WebEngine webEngine = webView.getEngine();
-        webEngine.loadContent(content_url);
-        trailer.getChildren().add(webView);
-        webView.getChildrenUnmodifiable().addListener((ListChangeListener<Node>) change -> {
-            Set<Node> deadSeaScroll = webView.lookupAll(".scroll-bar");
-            for (Node scroll : deadSeaScroll) {
-                scroll.setVisible(false);
-            }
-        });
-
-        try {
-            Field field = webEngine.getClass().getDeclaredField("page");
-            field.setAccessible(true);
-            WebPage page = (WebPage)field.get(webEngine);
-            SwingUtilities.invokeLater(() -> page.setBackgroundColor(new java.awt.Color(255, 255, 255, 0).getRGB()));
-        } catch (Exception e) {
-            logger.err("Unable to show trailer: " + e.getMessage());
-        }
-
         Button playButton = new Button("Jouer");
         GridPane.setVgrow(playButton, Priority.ALWAYS);
         GridPane.setHgrow(playButton, Priority.ALWAYS);
@@ -348,7 +257,7 @@ public class App extends Panel {
         playButton.setTranslateY(200);
         playButton.setMinWidth(140);
         playButton.setMaxHeight(40);
-        playButton.setStyle("-fx-background-color: #ff6500; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
+        playButton.setStyle("-fx-background-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
         playButton.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
         playButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         playButton.setOnMouseClicked(e -> {
@@ -363,8 +272,8 @@ public class App extends Panel {
         GridPane.setHalignment(settingsButton, HPos.CENTER);
         MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.SETTINGS);
         settingsIcon.setSize("18px");
-        settingsIcon.setFill(Color.rgb(255, 101, 0));
-        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
+        settingsIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
+        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
         settingsButton.setTranslateX(88);
         settingsButton.setTranslateY(194);
         settingsButton.setMinWidth(26);
@@ -382,7 +291,7 @@ public class App extends Panel {
             showSettingsMenu(pane);
         });
 
-        progressBar.setStyle("-fx-background-color: rgba(255, 101, 0);");
+        progressBar.setStyle("-fx-background-color: rgb(184, 65, 45);");
         progressBar.setMinWidth(450);
         setBottom(progressBar);
         setCenterH(progressBar);
@@ -394,11 +303,14 @@ public class App extends Panel {
         setCenterH(stepLabel);
         stepLabel.setTranslateY(242);
 
-        pane.getChildren().addAll(title, imgView, trailer, playButton, settingsButton);
+        pane.getChildren().addAll(title, imgView, playButton, settingsButton);
     }
 
     private void showApocalypseMenu(GridPane pane) {
         showedMenu = "apocalypse";
+        this.onShow();
+
+        backgroundImage.setStyle("-fx-background-image: url(images/background3.jpg);");
 
         ImageView imgView = new ImageView();
         Image img = new Image("images/TempoApocalypse.png");
@@ -423,38 +335,6 @@ public class App extends Panel {
         title.setTranslateY(30);
         title.setTranslateX(65);
 
-        GridPane trailer = new GridPane();
-        GridPane.setVgrow(trailer, Priority.ALWAYS);
-        GridPane.setHgrow(trailer, Priority.ALWAYS);
-        GridPane.setValignment(trailer, VPos.CENTER);
-        GridPane.setHalignment(trailer, HPos.CENTER);
-        trailer.setMinWidth(720);
-        trailer.setMaxWidth(720);
-        trailer.setMinHeight(480);
-        trailer.setMaxHeight(480);
-        trailer.setTranslateY(130);
-        String content_url = Constants.TRAILER_CONTENT_APOCALYPSE;
-        WebView webView = new WebView();
-        webView.setStyle("overflow-x: hidden; overflow-y: hidden");
-        WebEngine webEngine = webView.getEngine();
-        webEngine.loadContent(content_url);
-        trailer.getChildren().add(webView);
-        webView.getChildrenUnmodifiable().addListener((ListChangeListener<Node>) change -> {
-            Set<Node> deadSeaScroll = webView.lookupAll(".scroll-bar");
-            for (Node scroll : deadSeaScroll) {
-                scroll.setVisible(false);
-            }
-        });
-
-        try {
-            Field field = webEngine.getClass().getDeclaredField("page");
-            field.setAccessible(true);
-            WebPage page = (WebPage)field.get(webEngine);
-            SwingUtilities.invokeLater(() -> page.setBackgroundColor(new java.awt.Color(255, 255, 255, 0).getRGB()));
-        } catch (Exception e) {
-            logger.err("Unable to show trailer: " + e.getMessage());
-        }
-
         Button playButton = new Button("Jouer");
         GridPane.setVgrow(playButton, Priority.ALWAYS);
         GridPane.setHgrow(playButton, Priority.ALWAYS);
@@ -463,7 +343,7 @@ public class App extends Panel {
         playButton.setTranslateY(200);
         playButton.setMinWidth(140);
         playButton.setMaxHeight(40);
-        playButton.setStyle("-fx-background-color: #ff6500; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
+        playButton.setStyle("-fx-background-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
         playButton.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
         playButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         playButton.setOnMouseClicked(e -> {
@@ -478,8 +358,8 @@ public class App extends Panel {
         GridPane.setHalignment(settingsButton, HPos.CENTER);
         MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.SETTINGS);
         settingsIcon.setSize("18px");
-        settingsIcon.setFill(Color.rgb(255, 101, 0));
-        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
+        settingsIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
+        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
         settingsButton.setTranslateX(88);
         settingsButton.setTranslateY(194);
         settingsButton.setMinWidth(26);
@@ -497,7 +377,7 @@ public class App extends Panel {
             showSettingsMenu(pane);
         });
 
-        progressBar.setStyle("-fx-background-color: rgba(255, 101, 0);");
+        progressBar.setStyle("-fx-background-color: rgb(184, 65, 45);");
         progressBar.setMinWidth(450);
         setBottom(progressBar);
         setCenterH(progressBar);
@@ -509,11 +389,12 @@ public class App extends Panel {
         setCenterH(stepLabel);
         stepLabel.setTranslateY(242);
 
-        pane.getChildren().addAll(title, imgView, trailer, playButton, settingsButton);
+        pane.getChildren().addAll(title, imgView, playButton, settingsButton);
     }
 
     private void showOneblockMenu(GridPane pane) {
         showedMenu = "oneblock";
+        this.onShow();
 
         ImageView imgView = new ImageView();
         Image img = new Image("images/TempoOneblock.png");
@@ -538,38 +419,6 @@ public class App extends Panel {
         title.setTranslateY(30);
         title.setTranslateX(60);
 
-        GridPane trailer = new GridPane();
-        GridPane.setVgrow(trailer, Priority.ALWAYS);
-        GridPane.setHgrow(trailer, Priority.ALWAYS);
-        GridPane.setValignment(trailer, VPos.CENTER);
-        GridPane.setHalignment(trailer, HPos.CENTER);
-        trailer.setMinWidth(720);
-        trailer.setMaxWidth(720);
-        trailer.setMinHeight(480);
-        trailer.setMaxHeight(480);
-        trailer.setTranslateY(130);
-        String content_url = Constants.TRAILER_CONTENT_ONEBLOCK;
-        WebView webView = new WebView();
-        webView.setStyle("overflow-x: hidden; overflow-y: hidden");
-        WebEngine webEngine = webView.getEngine();
-        webEngine.loadContent(content_url);
-        trailer.getChildren().add(webView);
-        webView.getChildrenUnmodifiable().addListener((ListChangeListener<Node>) change -> {
-            Set<Node> deadSeaScroll = webView.lookupAll(".scroll-bar");
-            for (Node scroll : deadSeaScroll) {
-                scroll.setVisible(false);
-            }
-        });
-
-        try {
-            Field field = webEngine.getClass().getDeclaredField("page");
-            field.setAccessible(true);
-            WebPage page = (WebPage)field.get(webEngine);
-            SwingUtilities.invokeLater(() -> page.setBackgroundColor(new java.awt.Color(255, 255, 255, 0).getRGB()));
-        } catch (Exception e) {
-            logger.err("Unable to show trailer: " + e.getMessage());
-        }
-
         Button playButton = new Button("Jouer");
         GridPane.setVgrow(playButton, Priority.ALWAYS);
         GridPane.setHgrow(playButton, Priority.ALWAYS);
@@ -578,7 +427,7 @@ public class App extends Panel {
         playButton.setTranslateY(200);
         playButton.setMinWidth(140);
         playButton.setMaxHeight(40);
-        playButton.setStyle("-fx-background-color: #ff6500; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
+        playButton.setStyle("-fx-background-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
         playButton.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
         playButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         playButton.setOnMouseClicked(e -> {
@@ -593,8 +442,8 @@ public class App extends Panel {
         GridPane.setHalignment(settingsButton, HPos.CENTER);
         MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.SETTINGS);
         settingsIcon.setSize("18px");
-        settingsIcon.setFill(Color.rgb(255, 101, 0));
-        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
+        settingsIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
+        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
         settingsButton.setTranslateX(88);
         settingsButton.setTranslateY(194);
         settingsButton.setMinWidth(26);
@@ -612,7 +461,7 @@ public class App extends Panel {
             showSettingsMenu(pane);
         });
 
-        progressBar.setStyle("-fx-background-color: rgba(255, 101, 0);");
+        progressBar.setStyle("-fx-background-color: rgb(184, 65, 45);");
         progressBar.setMinWidth(450);
         setBottom(progressBar);
         setCenterH(progressBar);
@@ -624,126 +473,12 @@ public class App extends Panel {
         setCenterH(stepLabel);
         stepLabel.setTranslateY(242);
 
-        pane.getChildren().addAll(title, imgView, trailer, playButton, settingsButton);
-    }
-
-    private void showMiniGamesMenu(GridPane pane) {
-        showedMenu = "minigames";
-
-        ImageView imgView = new ImageView();
-        Image img = new Image("images/TempoMinigames.png");
-        imgView.setImage(img);
-        imgView.setPreserveRatio(true);
-        imgView.setFitHeight(100d);
-
-        GridPane.setHgrow(imgView, Priority.ALWAYS);
-        GridPane.setVgrow(imgView, Priority.ALWAYS);
-        GridPane.setValignment(imgView, VPos.TOP);
-        imgView.setTranslateY(20);
-        imgView.setTranslateX(-130);
-        setCenterH(imgView);
-        imgView.setPreserveRatio(true);
-
-        Label title = new Label("Mini-Jeux");
-        GridPane.setVgrow(title, Priority.ALWAYS);
-        GridPane.setHgrow(title, Priority.ALWAYS);
-        GridPane.setValignment(title, VPos.TOP);
-        setCenterH(title);
-        title.setStyle("-fx-font-size: 50px; -fx-text-fill: #fff; -fx-font-weight: bold;");
-        title.setTranslateY(30);
-        title.setTranslateX(60);
-
-        GridPane trailer = new GridPane();
-        GridPane.setVgrow(trailer, Priority.ALWAYS);
-        GridPane.setHgrow(trailer, Priority.ALWAYS);
-        GridPane.setValignment(trailer, VPos.CENTER);
-        GridPane.setHalignment(trailer, HPos.CENTER);
-        trailer.setMinWidth(720);
-        trailer.setMaxWidth(720);
-        trailer.setMinHeight(480);
-        trailer.setMaxHeight(480);
-        trailer.setTranslateY(130);
-        String content_url = Constants.TRAILER_CONTENT_MINIGAMES;
-        WebView webView = new WebView();
-        webView.setStyle("overflow-x: hidden; overflow-y: hidden");
-        WebEngine webEngine = webView.getEngine();
-        webEngine.loadContent(content_url);
-        trailer.getChildren().add(webView);
-        webView.getChildrenUnmodifiable().addListener((ListChangeListener<Node>) change -> {
-            Set<Node> deadSeaScroll = webView.lookupAll(".scroll-bar");
-            for (Node scroll : deadSeaScroll) {
-                scroll.setVisible(false);
-            }
-        });
-
-        try {
-            Field field = webEngine.getClass().getDeclaredField("page");
-            field.setAccessible(true);
-            WebPage page = (WebPage)field.get(webEngine);
-            SwingUtilities.invokeLater(() -> page.setBackgroundColor(new java.awt.Color(255, 255, 255, 0).getRGB()));
-        } catch (Exception e) {
-            logger.err("Unable to show trailer: " + e.getMessage());
-        }
-
-        Button playButton = new Button("Jouer");
-        GridPane.setVgrow(playButton, Priority.ALWAYS);
-        GridPane.setHgrow(playButton, Priority.ALWAYS);
-        GridPane.setValignment(playButton, VPos.BOTTOM);
-        GridPane.setHalignment(playButton, HPos.CENTER);
-        playButton.setTranslateY(200);
-        playButton.setMinWidth(140);
-        playButton.setMaxHeight(40);
-        playButton.setStyle("-fx-background-color: #ff6500; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
-        playButton.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
-        playButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
-        playButton.setOnMouseClicked(e -> {
-            playButton.setDisable(true);
-            this.play(pane, "minigames");
-        });
-
-        Button settingsButton = new Button();
-        GridPane.setVgrow(settingsButton, Priority.ALWAYS);
-        GridPane.setHgrow(settingsButton, Priority.ALWAYS);
-        GridPane.setValignment(settingsButton, VPos.BOTTOM);
-        GridPane.setHalignment(settingsButton, HPos.CENTER);
-        MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.SETTINGS);
-        settingsIcon.setSize("18px");
-        settingsIcon.setFill(Color.rgb(255, 101, 0));
-        settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
-        settingsButton.setTranslateX(88);
-        settingsButton.setTranslateY(194);
-        settingsButton.setMinWidth(26);
-        settingsButton.setMaxWidth(26);
-        settingsButton.setMinHeight(26);
-        settingsButton.setMaxHeight(26);
-        settingsButton.setGraphic(settingsIcon);
-        settingsButton.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
-        settingsButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
-        settingsButton.setOnMouseClicked(e -> {
-            if (showedMenu == "minigames" && this.isDownloading) {
-                return;
-            }
-            topPanel.getChildren().clear();
-            showSettingsMenu(pane);
-        });
-
-        progressBar.setStyle("-fx-background-color: rgba(255, 101, 0);");
-        progressBar.setMinWidth(450);
-        setBottom(progressBar);
-        setCenterH(progressBar);
-        progressBar.setTranslateY(225);
-
-        stepLabel.setStyle("-fx-text-fill: rgba(255, 255, 255);");
-        stepLabel.setMinWidth(450);
-        setBottom(stepLabel);
-        setCenterH(stepLabel);
-        stepLabel.setTranslateY(242);
-
-        pane.getChildren().addAll(title, imgView, trailer, playButton, settingsButton);
+        pane.getChildren().addAll(title, imgView, playButton, settingsButton);
     }
 
     private void showSettingsMenu(GridPane pane) {
         showedMenu = "settingsMenu";
+        this.onShow();
 
         Label Title = new Label("Paramètre du Launcher");
         GridPane.setVgrow(Title, Priority.ALWAYS);
@@ -791,7 +526,7 @@ public class App extends Panel {
         GridPane.setHgrow(comboBox, Priority.ALWAYS);
         GridPane.setValignment(comboBox, VPos.TOP);
         comboBox.getStyleClass().add("ramComboBox");
-        comboBox.setStyle("-fx-background-color: rgba(255, 101, 0, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
+        comboBox.setStyle("-fx-background-color: rgba(184, 65, 45, 0.0); -fx-border-color: #B8412D; -fx-border-radius: 2px;");
         comboBox.setTranslateY(100);
 
         //Save Button
@@ -801,9 +536,9 @@ public class App extends Panel {
         GridPane.setValignment(saveButton, VPos.TOP);
         GridPane.setHalignment(saveButton, HPos.LEFT);
         MaterialDesignIconView saveIconView = new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE);
-        saveIconView.setFill(Color.rgb(255, 101, 0));
+        saveIconView.setFill(Constants.LAUNCHER_COLOR_RGB);
         saveIconView.setSize("15");
-        saveButton.setStyle("-fx-background-color: rgba(255, 101, 0, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
+        saveButton.setStyle("-fx-background-color: rgba(184, 65, 45, 0.0); -fx-border-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
         saveButton.setTranslateX(100);
         saveButton.setTranslateY(99.5d);
         saveButton.setMinWidth(29);
@@ -835,7 +570,7 @@ public class App extends Panel {
         blueLeftSeparator.setMaxWidth(3);
         blueLeftSeparator.setMinHeight(40);
         blueLeftSeparator.setMaxHeight(40);
-        blueLeftSeparator.setStyle("-fx-background-color: rgb(255, 101, 0); -fx-border-width: 3 3 3 0; -fx-border-color: rgb(255, 101, 0);");
+        blueLeftSeparator.setStyle("-fx-background-color: rgb(184, 65, 45); -fx-border-width: 3 3 3 0; -fx-border-color: rgb(184, 65, 45);");
 
         Image avatarImg = new Image(avatarUrl());
         ImageView avatarView = new ImageView();
@@ -864,8 +599,8 @@ public class App extends Panel {
         GridPane.setHalignment(logoutButton, HPos.LEFT);
         MaterialDesignIconView logoutIcon = new MaterialDesignIconView(MaterialDesignIcon.LOGOUT);
         logoutIcon.setSize("18px");
-        logoutIcon.setFill(Color.rgb(255, 101, 0));
-        logoutButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: #ff6500; -fx-border-radius: 2px;");
+        logoutIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
+        logoutButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
         logoutButton.setTranslateY(-5);
         logoutButton.setTranslateX(-5);
         setBottom(logoutButton);
@@ -905,13 +640,12 @@ public class App extends Panel {
         serverLeftSeparator.setMaxWidth(3);
         serverLeftSeparator.setMinHeight(40);
         serverLeftSeparator.setMaxHeight(40);
-        serverLeftSeparator.setStyle("-fx-background-color: rgb(255, 101, 0); -fx-border-width: 3 3 3 0; -fx-border-color: rgb(255, 101, 0);");
+        serverLeftSeparator.setStyle("-fx-background-color: rgb(184, 65, 45); -fx-border-width: 3 3 3 0; -fx-border-color: rgb(184, 65, 45);");
         try {
             if (saver.get("serverSelector").contains("skyblock")) { serverLeftSeparator.setTranslateY(0); showSkyblockMenu(topPanel); }
             else if (saver.get("serverSelector").contains("survival")) { serverLeftSeparator.setTranslateY(65); showSurvivalMenu(topPanel); }
             else if (saver.get("serverSelector").contains("apocalypse")) { serverLeftSeparator.setTranslateY(130); showApocalypseMenu(topPanel);}
             else if (saver.get("serverSelector").contains("oneblock")) { serverLeftSeparator.setTranslateY(195); showOneblockMenu(topPanel);}
-            else if (saver.get("serverSelector").contains("minigames")) { serverLeftSeparator.setTranslateY(260); showMiniGamesMenu(topPanel);}
             else serverLeftSeparator.setTranslateY(0);
         } catch (NullPointerException e) {
             logger.warn(e.getMessage());
@@ -1041,42 +775,12 @@ public class App extends Panel {
             saver.save();
         });
 
-        ImageView minigamesView = new ImageView();
-        Image minigamesImg = new Image("images/TempoMinigames.png");
-        minigamesView.setImage(minigamesImg);
-        minigamesView.setPreserveRatio(true);
-        minigamesView.setFitHeight(50d);
 
-        GridPane.setHgrow(minigamesView, Priority.ALWAYS);
-        GridPane.setVgrow(minigamesView, Priority.ALWAYS);
-        GridPane.setValignment(minigamesView, VPos.CENTER);
-        minigamesView.setTranslateX(34);
-        minigamesView.setTranslateY(260);
-        minigamesView.setPreserveRatio(true);
-        minigamesView.setFitWidth(28);
-
-        Label minigamesLabel = new Label("Mini-Jeux");
-        GridPane.setHgrow(minigamesLabel, Priority.ALWAYS);
-        GridPane.setVgrow(minigamesLabel, Priority.ALWAYS);
-        GridPane.setValignment(minigamesLabel, VPos.CENTER);
-        minigamesLabel.setTranslateX(90);
-        minigamesLabel.setTranslateY(260);
-        minigamesLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #fff;");
-        minigamesLabel.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
-        minigamesLabel.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
-        minigamesLabel.setOnMouseClicked(e -> {
-            serverLeftSeparator.setTranslateY(260);
-            topPanel.getChildren().clear();
-            showMiniGamesMenu(topPanel);
-            saver.set("serverSelector", "minigames");
-            saver.save();
-        });
 
         pane.getChildren().addAll(serverLeftSeparator, skyblockView, skyblockLabel,
                 survivalView, survivalLabel,
                 apocalypseView, apocalypseLabel,
-                oneblockView, oneblockLabel,
-                minigamesView, minigamesLabel);
+                oneblockView, oneblockLabel);
 
     }
 

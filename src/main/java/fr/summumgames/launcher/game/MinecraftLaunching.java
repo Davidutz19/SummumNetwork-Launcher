@@ -122,15 +122,6 @@ public class MinecraftLaunching {
             );
             play(pane);
         }
-        else if (serverName.contains("minigames")) {
-            minecraftInfos.GAME_VERSION = "1.8.9";
-            minecraftInfos.VERSION_TYPE = VersionType.FORGE;
-            minecraftInfos.FORGE_VERSION_TYPE = ForgeVersionBuilder.ForgeVersionType.OLD;
-            minecraftInfos.FORGE_VERSION = "1.8.9-11.15.1.2318";
-            minecraftInfos.OPTIFINE_VERSION = "1.8.9_HD_U_M5";
-            minecraftInfos.OLL_GAME_TYPE = GameType.V1_8_HIGHER;
-            play(pane);
-        }
     }
 
     public void play(GridPane pane) {
@@ -201,7 +192,6 @@ public class MinecraftLaunching {
             else if (serverName.contains("survival")) updater.update(Launcher.getInstance().getSurvivalDir());
             else if (serverName.contains("apocalypse")) updater.update(Launcher.getInstance().getApocalypseDir());
             else if (serverName.contains("oneblock")) updater.update(Launcher.getInstance().getOneblockDir());
-            else if (serverName.contains("minigames")) updater.update(Launcher.getInstance().getMinigamesDir());
             else {Platform.exit(); System.exit(1);}
             
             this.startGame(updater.getForgeVersion().getForgeVersion());
@@ -221,7 +211,6 @@ public class MinecraftLaunching {
         else if (serverName.contains("survival")) gameFolder = Launcher.getInstance().getSurvivalDir().toFile();
         else if (serverName.contains("apocalypse")) gameFolder = Launcher.getInstance().getApocalypseDir().toFile();
         else if (serverName.contains("oneblock")) gameFolder = Launcher.getInstance().getOneblockDir().toFile();
-        else if (serverName.contains("minigames")) gameFolder = Launcher.getInstance().getMinigamesDir().toFile();
         else {Platform.exit(); System.exit(1);}
 
         if (serverName.contains("skyblock")) {
@@ -252,13 +241,6 @@ public class MinecraftLaunching {
                     gameFolder,
                     new GameVersion(gameVersion, minecraftInfos.OLL_GAME_TYPE.setNFVD(minecraftInfos.OLL_FORGE_DISCRIMINATOR)),
                     new GameTweak[]{}
-            );
-        }else if (serverName.contains("minigames")) {
-            infos = new GameInfos(
-                    Constants.LAUNCHER_NAME,
-                    gameFolder,
-                    new GameVersion(gameVersion, minecraftInfos.OLL_GAME_TYPE),
-                    new GameTweak[]{GameTweak.FORGE}
             );
         }else {
              infos = new GameInfos(
