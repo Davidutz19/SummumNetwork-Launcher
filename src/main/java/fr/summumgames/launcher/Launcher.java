@@ -1,5 +1,7 @@
 package fr.summumgames.launcher;
 
+import fr.summumgames.launcher.auth.AuthMineweb;
+import fr.summumgames.launcher.runtime.UrlRuntimeGenerator;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panels.pages.App;
 import fr.summumgames.launcher.ui.panels.pages.Login;
@@ -22,8 +24,21 @@ import javafx.stage.Stage;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.UUID;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
 
 public class Launcher extends Application {
     private PanelManager panelManager;
@@ -42,6 +57,7 @@ public class Launcher extends Application {
     public Launcher() {
         instance = this;
         this.logger = new Logger("[SummumNetworkLauncher]", Paths.get(this.launcherDir.toString(), "launcher.log"));
+        this.logger.info(UrlRuntimeGenerator.getRuntimeUrl(8));
         if (!this.launcherDir.toFile().exists()) {
             if (!this.launcherDir.toFile().mkdir()) {
                 this.logger.err("Unable to create launcher folder");
@@ -76,6 +92,9 @@ public class Launcher extends Application {
 
                 saver.set("msAccessToken", response.getAccessToken());
                 saver.set("msRefreshToken", response.getRefreshToken());
+                saver.remove("offline-username");
+                saver.remove("offline-accessToken");
+                saver.remove("offline-uuid");
                 saver.save();
 
                 this.setAuthInfos(new AuthInfos(
@@ -92,11 +111,18 @@ public class Launcher extends Application {
                 saver.save();
             }
 
-        }else if (saver.get("offline-username") != null) {
-            this.authInfos = new AuthInfos(saver.get("offline-username"), UUID.randomUUID().toString(), UUID.randomUUID().toString());
-            return true;
-        }
+        }else if (saver.get("offline-username") != null && saver.get("offline-accessToken") != null) {
+            AuthMineweb authMineweb = new AuthMineweb();
 
+            if (saver.get("offline-username").equals(authMineweb.getNameWithToken(saver.get("offline-accessToken")))) {
+                this.authInfos = new AuthInfos(saver.get("offline-username"), saver.get("offline-accessToken"), saver.get("offline-uuid"));
+                return true;
+            } else {
+                saver.remove("offline-username");
+                saver.remove("offline-accessToken");
+                saver.remove("offline-uuid");
+            }
+        }
         return false;
     }
 

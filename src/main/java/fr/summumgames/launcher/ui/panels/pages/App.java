@@ -51,6 +51,19 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
+
 public class App extends Panel {
 
     private GridPane centerPane = new GridPane();
@@ -824,10 +837,8 @@ public class App extends Panel {
         blueLeftSeparator.setMaxHeight(40);
         blueLeftSeparator.setStyle("-fx-background-color: rgb(255, 101, 0); -fx-border-width: 3 3 3 0; -fx-border-color: rgb(255, 101, 0);");
 
-        String avatarUrl = avatarUrl(Constants.AVATAR_URL);
-
+        Image avatarImg = new Image(avatarUrl());
         ImageView avatarView = new ImageView();
-        Image avatarImg = new Image(avatarUrl);
         avatarView.setImage(avatarImg);
         avatarView.setPreserveRatio(true);
         avatarView.setFitHeight(50d);
@@ -1074,11 +1085,11 @@ public class App extends Panel {
         new MinecraftLaunching(pane, progressBar, stepLabel, isDownloading, panelManager, saver, serverName);
     }
 
-    public String avatarUrl(String avatarUrl) {
-        if (saver.get("offline-username") != "") {
-            return avatarUrl + "MHF_Steve";
+    public String avatarUrl() {
+        if (saver.get("offline-username") != null) {
+            return Constants.AVATAR_URL + "MHF_STEVE";
         } else {
-            return avatarUrl + Launcher.getInstance().getAuthInfos().getUuid();
+            return Constants.AVATAR_URL + Launcher.getInstance().getAuthInfos().getUsername();
         }
     }
 }

@@ -3,11 +3,11 @@ package fr.summumgames.launcher.auth;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.flowarg.flowlogger.ILogger;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
 import fr.summumgames.launcher.Launcher;
 import fr.summumgames.launcher.utils.Constants;
 import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
+import javafx.scene.control.Label;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -20,6 +20,19 @@ import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
+
 public class AuthMineweb {
 
     private ILogger logger = Launcher.getInstance().getLogger();
@@ -29,7 +42,7 @@ public class AuthMineweb {
     private String username;
     private String hash;
 
-    public void login(String username, String password) {
+    public void login(String username, String password, Label errorLabel) {
         try {
             URLConnection connection = (new URL(Constants.WEB_URL + "auth/start?username=" + username + "&password=" + getSha512(password)).openConnection());
             connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
@@ -46,6 +59,8 @@ public class AuthMineweb {
                         saveCredentials();
                         saveAutInfos();
                         break;
+                    case "error_password":
+                        errorLabel.setText("Nom d'utilisateur ou mot de passe invalide");
                     default:
                         break;
                 }
@@ -58,6 +73,8 @@ public class AuthMineweb {
 
     public void saveCredentials() {
         saver.set("offline-username", username);
+        saver.set("offline-accessToken", getInfos("auth-accessToken"));
+        saver.set("offline-uuid", getInfos("auth-uuid"));
         saver.remove("msAccessToken");
         saver.remove("msRefreshToken");
         saver.save();
@@ -65,8 +82,8 @@ public class AuthMineweb {
 
     public void saveAutInfos() {
         AuthInfos infos = new AuthInfos(username,
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString());
+                saver.get("offline-accessToken"),
+                saver.get("offline-uuid"));
 
         Launcher.getInstance().setAuthInfos(infos);
     }
@@ -90,6 +107,24 @@ public class AuthMineweb {
             }
         } else {
             logger.warn("Vous n'êtes pas connecté.");
+        }
+        return "";
+    }
+
+    public String getNameWithToken(String token) {
+        try {
+            URLConnection connection = (new URL(Constants.WEB_URL + "auth/getDataIngame?accessToken=" + token).openConnection());
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+            connection.connect();
+            InputStream is = connection.getInputStream();
+            BufferedReader in = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                JsonObject jsonObject = (JsonObject) new JsonParser().parse(inputLine);
+                return String.valueOf(jsonObject.get("pseudo")).replaceAll("\"", "");
+            }
+        }catch (Exception e) {
+            logger.warn(e.getMessage());
         }
         return "";
     }

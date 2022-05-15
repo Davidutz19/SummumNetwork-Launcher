@@ -4,6 +4,19 @@ import javafx.application.Application;
 
 import javax.swing.*;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
+
 public class Main {
     public static void main(String[] args)
     {

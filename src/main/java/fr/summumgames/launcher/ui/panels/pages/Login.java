@@ -40,6 +40,19 @@ import java.net.URISyntaxException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
+
 public class Login extends Panel {
 
     Saver saver = Launcher.getInstance().getSaver();
@@ -118,7 +131,11 @@ public class Login extends Panel {
         registerHere.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         registerHere.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         registerHere.setOnMouseClicked(e -> {
-            openURL("https://www.minecraft.net/fr-fr/get-minecraft");
+            if (connectWithMicrosoft.get()) {
+                openURL("https://www.minecraft.net/fr-fr/get-minecraft");
+            } else {
+                openURL(Constants.WEB_URL + "register");
+            }
         });
 
         bottomPanel.getChildren().addAll(noAccount, registerHere);
@@ -244,23 +261,31 @@ public class Login extends Panel {
         conectionButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         conectionButton.setOnMouseClicked(e -> {
             if (connectWithMicrosoft.get()) {
+                conectionButton.setDisable(true);
                 if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                     errorLabel.setText("Champ Incomplet");
+                    conectionButton.setDisable(false);
                 } else {
                    authMicrosoft.login(usernameField.getText(), passwordField.getText(), errorLabel);
                     if (authMicrosoft.isConnected()) {
                         logger.info("Hello " + Launcher.getInstance().getAuthInfos().getUsername() + " !");
                         panelManager.showPanel(new App());
+                    } else {
+                        conectionButton.setDisable(false);
                     }
                 }
             } else {
+                conectionButton.setDisable(true);
                 if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                     errorLabel.setText("Champ Incomplet");
+                    conectionButton.setDisable(false);
                 } else {
-                    authMineweb.login(usernameField.getText(), passwordField.getText());
+                    authMineweb.login(usernameField.getText(), passwordField.getText(), errorLabel);
                     if (authMineweb.isConnected()){
                         logger.info("Hello " + Launcher.getInstance().getAuthInfos().getUsername() + " !");
                         panelManager.showPanel(new App());
+                    } else {
+                        conectionButton.setDisable(false);
                     }
                 }
             }
@@ -331,47 +356,6 @@ public class Login extends Panel {
         GridPane.setHalignment(mainPanel, HPos.CENTER);
         GridPane.setValignment(mainPanel, VPos.CENTER);
 
-    }
-
-    public void authenticate(String user, String password, Label error) {
-        if (connectWithMicrosoft.get()) {
-            MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
-            try {
-                MicrosoftAuthResult result = authenticator.loginWithCredentials(user, password);
-                saver.set("msAccessToken", result.getAccessToken());
-                saver.set("msRefreshToken", result.getRefreshToken());
-                saver.set("offline-username", "");
-                saver.save();
-
-                AuthInfos infos = new AuthInfos(
-                        result.getProfile().getName(),
-                        result.getAccessToken(),
-                        result.getProfile().getId()
-                );
-
-                Launcher.getInstance().setAuthInfos(infos);
-
-                this.logger.info("Hello" + " " + infos.getUsername());
-
-                panelManager.showPanel(new App());
-            } catch (MicrosoftAuthenticationException e) {
-                error.setText("Adresse mail ou mot de passe invalide");
-                return;
-            }
-        }else {
-            AuthInfos infos = new AuthInfos(usernameField.getText(),
-                    UUID.randomUUID().toString(),
-                    UUID.randomUUID().toString());
-            saver.set("offline-username", infos.getUsername());
-            saver.remove("msAccessToken");
-            saver.remove("msRefreshToken");
-            saver.save();
-            Launcher.getInstance().setAuthInfos(infos);
-
-            this.logger.info("Hello" + " " + infos.getUsername() + " !");
-
-            panelManager.showPanel(new App());
-        }
     }
 
     private void openURL(String url){

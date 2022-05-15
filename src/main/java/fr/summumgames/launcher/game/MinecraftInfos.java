@@ -5,6 +5,19 @@ import fr.flowarg.flowupdater.versions.VersionType;
 import fr.flowarg.openlauncherlib.NewForgeVersionDiscriminator;
 import fr.theshark34.openlauncherlib.minecraft.GameType;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
+
 public class MinecraftInfos {
 
     public String GAME_VERSION = "1.16.5";
@@ -21,7 +34,7 @@ public class MinecraftInfos {
     );
 
 
-    public String CURSE_MODS_LIST_URL = "https://summumgames.000webhostapp.com/Mods/mods-list-skyblock.json";
-    public String MODS_LIST_URL = "https://summumgames.000webhostapp.com/Mods/mods-list-skyblock.json";
+    public String CURSE_MODS_LIST_URL = "https://dev.davidutz.ga/SummumNetwork/Skyblock/mods-list-skyblock.json";
+    public String MODS_LIST_URL = "https://dev.davidutz.ga/SummumNetwork/Skyblock/mods-list-skyblock.json";
 
 }

@@ -10,6 +10,19 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
+
 public abstract class Panel implements IPanel, IMovable, ITakePlace {
     protected ILogger logger;
     protected GridPane layout = new GridPane();

@@ -31,6 +31,19 @@ import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.List;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
+
 public class MinecraftLaunching {
 
     GridPane pane;
@@ -68,8 +81,8 @@ public class MinecraftLaunching {
                     minecraftInfos.GAME_VERSION,
                     "20210115.111550"
             );
-            minecraftInfos.CURSE_MODS_LIST_URL = "https://summumgames.000webhostapp.com/Mods/mods-list-skyblock.json";
-            minecraftInfos.MODS_LIST_URL = "https://summumgames.000webhostapp.com/Mods/mods-list-skyblock.json";
+            minecraftInfos.CURSE_MODS_LIST_URL = "https://dev.davidutz.ga/SummumNetwork/Skyblock/mods-list-skyblock.json";
+            minecraftInfos.MODS_LIST_URL = "https://dev.davidutz.ga/SummumNetwork/Skyblock/mods-list-skyblock.json";
             play(pane);
         }
         else if (serverName.contains("survival")) {
@@ -305,7 +318,6 @@ public class MinecraftLaunching {
     public boolean isDownloading() {
         return isDownloading;
     }
-
     public enum StepInfo {
         READ("Lecture du fichier json..."),
         DL_LIBS("Téléchargement des libraries..."),
@@ -327,5 +339,4 @@ public class MinecraftLaunching {
             return details;
         }
     }
-
 }

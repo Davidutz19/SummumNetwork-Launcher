@@ -9,6 +9,19 @@ import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.scene.control.Label;
 
+/**
+ *
+ * SummumNetwork Launcher
+ *
+ * @author SummumNetwork Team
+ * @version 1.0
+ * @since 02-03-2022
+ * @link https://www.summum-network.net
+ *
+ * SummumNetwork© All right Reserved
+ *
+ **/
+
 public class AuthMicrosoft {
 
     private ILogger logger = Launcher.getInstance().getLogger();
@@ -36,7 +49,9 @@ public class AuthMicrosoft {
     public void saveCredentials(MicrosoftAuthResult result) {
         saver.set("msAccessToken", result.getAccessToken());
         saver.set("msRefreshToken", result.getRefreshToken());
-        saver.set("offline-username", "");
+        saver.remove("offline-username");
+        saver.remove("offline-accessToken");
+        saver.remove("offline-uuid");
         saver.save();
     }
 
