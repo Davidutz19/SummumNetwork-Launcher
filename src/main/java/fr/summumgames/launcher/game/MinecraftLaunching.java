@@ -57,6 +57,7 @@ public class MinecraftLaunching {
     MinecraftInfos minecraftInfos = new MinecraftInfos();
 
     public MinecraftLaunching(GridPane pane, ProgressBar progressBar, Label stepLabel, Boolean isDownloading, PanelManager panelManager, Saver saver, String serverName) {
+
         this.pane = pane;
         this.progressBar = progressBar;
         this.stepLabel = stepLabel;

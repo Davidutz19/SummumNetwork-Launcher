@@ -80,7 +80,7 @@ case "`uname`" in
     ;;
 esac
 
-CLASSPATH=$APP_HOME/lib/flopenia-launcher-v2-1.0.0.jar:$APP_HOME/lib/openauth-1.1.2.jar:$APP_HOME/lib/fontawesomefx-8.9.jar:$APP_HOME/lib/flowupdater-1.5.2.jar:$APP_HOME/lib/openlauncherlib-3.2.3.jar:$APP_HOME/lib/FX-BorderlessScene-4.4.0.jar:$APP_HOME/lib/oshi-core-5.8.6.jar:$APP_HOME/lib/gson-2.8.9.jar:$APP_HOME/lib/flowmultitools-1.4.0.jar:$APP_HOME/lib/annotations-22.0.0.jar:$APP_HOME/lib/json-20211205.jar:$APP_HOME/lib/jna-platform-5.10.0.jar:$APP_HOME/lib/jna-5.10.0.jar:$APP_HOME/lib/slf4j-api-1.7.32.jar:$APP_HOME/lib/commons-compress-1.21.jar
+CLASSPATH=$APP_HOME/lib/flopenia-launcher-v2-1.0.0.jar:$APP_HOME/lib/openauth-1.1.2.jar:$APP_HOME/lib/fontawesomefx-8.9.jar:$APP_HOME/lib/flowupdater-1.5.3.jar:$APP_HOME/lib/openlauncherlib-3.2.4.jar:$APP_HOME/lib/FX-BorderlessScene-4.4.0.jar:$APP_HOME/lib/oshi-core-5.8.7.jar:$APP_HOME/lib/json-20211205.jar:$APP_HOME/lib/gson-2.8.9.jar:$APP_HOME/lib/flowmultitools-1.4.0.jar:$APP_HOME/lib/annotations-22.0.0.jar:$APP_HOME/lib/jna-platform-5.10.0.jar:$APP_HOME/lib/jna-5.10.0.jar:$APP_HOME/lib/slf4j-api-1.7.32.jar:$APP_HOME/lib/commons-compress-1.21.jar
 
 
 # Determine the Java command to use to start the JVM.
@@ -180,6 +180,6 @@ save () {
 APP_ARGS=`save "$@"`
 
 # Collect all arguments for the java command, following the shell quoting and substitution rules
-eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $FLOPENIA_LAUNCHER_V2_OPTS -classpath "\"$CLASSPATH\"" fr.flopenia.launcher.Main "$APP_ARGS"
+eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $FLOPENIA_LAUNCHER_V2_OPTS -classpath "\"$CLASSPATH\"" fr.summumgames.launcher.Main "$APP_ARGS"
 
 exec "$JAVACMD" "$@"

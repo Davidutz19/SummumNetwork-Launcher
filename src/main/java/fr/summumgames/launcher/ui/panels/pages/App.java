@@ -3,7 +3,7 @@ package fr.summumgames.launcher.ui.panels.pages;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import fr.summumgames.launcher.Launcher;
-import fr.summumgames.launcher.game.MinecraftInfos;
+import fr.summumgames.launcher.Main;
 import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panel.Panel;
@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
 
@@ -150,25 +151,43 @@ public class App extends Panel {
         GridPane.setVgrow(imgView, Priority.ALWAYS);
         GridPane.setValignment(imgView, VPos.TOP);
         imgView.setTranslateY(20);
-        imgView.setTranslateX(-120);
-        setCenterH(imgView);
+        imgView.setTranslateX(0);
+        setLeft(imgView);
         imgView.setPreserveRatio(true);
 
         Label title = new Label("SkyBlock");
         GridPane.setVgrow(title, Priority.ALWAYS);
         GridPane.setHgrow(title, Priority.ALWAYS);
         GridPane.setValignment(title, VPos.TOP);
-        setCenterH(title);
+        setLeft(title);
         title.setStyle("-fx-font-size: 50px; -fx-text-fill: #fff; -fx-font-weight: bold;");
         title.setTranslateY(30);
-        title.setTranslateX(50);
+        title.setTranslateX(115);
+
+        Label desc = new Label("Le skyblock est le mode de jeu principal de SummumNetwork. \n" +
+                "Celui-ci est un jeu dans lequel vous devez développer votre île \n" +
+                "afin d'acquérir de multiples richesses et de construire une île \n" +
+                "développé et belle. Il y a aussi le moyen de gagner des \n" +
+                "SummumCoins avec les richesses que vous acquérirez \n" +
+                "pour pouvoir ainsi placer ces SummumCoins pour \n" +
+                "gagner des Coins sur le site et pouvoir encore plus\n" +
+                "vous développer et avancer !"
+        );
+        GridPane.setVgrow(desc, Priority.ALWAYS);
+        GridPane.setHgrow(desc, Priority.ALWAYS);
+        GridPane.setValignment(desc, VPos.TOP);
+        setLeft(desc);
+        desc.setStyle("-fx-font-size: 14px; -fx-text-fill: #fff; -fx-opacity: 90%;");
+        desc.setTranslateY(130);
+        desc.setTranslateX(10);
 
         Button playButton = new Button("Jouer");
         GridPane.setVgrow(playButton, Priority.ALWAYS);
         GridPane.setHgrow(playButton, Priority.ALWAYS);
-        GridPane.setValignment(playButton, VPos.BOTTOM);
-        GridPane.setHalignment(playButton, HPos.CENTER);
-        playButton.setTranslateY(200);
+        GridPane.setValignment(playButton, VPos.TOP);
+        setLeft(playButton);
+        playButton.setTranslateY(315);
+        playButton.setTranslateX(70);
         playButton.setMinWidth(140);
         playButton.setMaxHeight(40);
         playButton.setStyle("-fx-background-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
@@ -182,14 +201,14 @@ public class App extends Panel {
         Button settingsButton = new Button();
         GridPane.setVgrow(settingsButton, Priority.ALWAYS);
         GridPane.setHgrow(settingsButton, Priority.ALWAYS);
-        GridPane.setValignment(settingsButton, VPos.BOTTOM);
-        GridPane.setHalignment(settingsButton, HPos.CENTER);
+        GridPane.setValignment(settingsButton, VPos.TOP);
+        setLeft(settingsButton);
         MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.SETTINGS);
         settingsIcon.setSize("18px");
         settingsIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
         settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color:" + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
-        settingsButton.setTranslateX(88);
-        settingsButton.setTranslateY(194);
+        settingsButton.setTranslateX(220);
+        settingsButton.setTranslateY(322);
         settingsButton.setMinWidth(26);
         settingsButton.setMaxWidth(26);
         settingsButton.setMinHeight(26);
@@ -198,26 +217,33 @@ public class App extends Panel {
         settingsButton.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
         settingsButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         settingsButton.setOnMouseClicked(e -> {
-            if (showedMenu == "skyblock" && this.isDownloading) {
-                return;
+            if (!this.isDownloading) {
+                topPanel.getChildren().clear();
+                showSettingsMenu(pane);
             }
-            topPanel.getChildren().clear();
-            showSettingsMenu(pane);
         });
 
-        progressBar.setStyle("-fx-background-color: rgb(184, 65, 45);");
-        progressBar.setMinWidth(450);
-        setBottom(progressBar);
-        setCenterH(progressBar);
-        progressBar.setTranslateY(225);
+        progressBar.setStyle("-fx-accent: rgb(184, 65, 45);");
+        GridPane.setVgrow(progressBar, Priority.ALWAYS);
+        GridPane.setHgrow(progressBar, Priority.ALWAYS);
+        GridPane.setValignment(progressBar, VPos.TOP);
+        setLeft(progressBar);
+        progressBar.setMinWidth(230);
+        progressBar.setTranslateY(365);
+        progressBar.setTranslateX(40);
 
         stepLabel.setStyle("-fx-text-fill: rgba(255, 255, 255);");
+        GridPane.setVgrow(stepLabel, Priority.ALWAYS);
+        GridPane.setHgrow(stepLabel, Priority.ALWAYS);
+        GridPane.setValignment(stepLabel, VPos.TOP);
+        setLeft(stepLabel);
         stepLabel.setMinWidth(450);
-        setBottom(stepLabel);
-        setCenterH(stepLabel);
-        stepLabel.setTranslateY(242);
+        stepLabel.setTranslateY(385);
+        stepLabel.setTranslateX(42);
 
-        pane.getChildren().addAll(title, imgView, playButton, settingsButton);
+        showImageSlider(pane);
+
+        pane.getChildren().addAll(title, imgView, desc, playButton, settingsButton);
     }
 
     private void showSurvivalMenu(GridPane pane) {
@@ -613,7 +639,7 @@ public class App extends Panel {
         logoutButton.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
         logoutButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         logoutButton.setOnMouseClicked(e -> {
-            if (showedMenu == "homeMenu" && this.isDownloading) {
+            if (this.isDownloading) {
                 return;
             }
 
@@ -642,11 +668,19 @@ public class App extends Panel {
         serverLeftSeparator.setMaxHeight(40);
         serverLeftSeparator.setStyle("-fx-background-color: rgb(184, 65, 45); -fx-border-width: 3 3 3 0; -fx-border-color: rgb(184, 65, 45);");
         try {
-            if (saver.get("serverSelector").contains("skyblock")) { serverLeftSeparator.setTranslateY(0); showSkyblockMenu(topPanel); }
-            else if (saver.get("serverSelector").contains("survival")) { serverLeftSeparator.setTranslateY(65); showSurvivalMenu(topPanel); }
-            else if (saver.get("serverSelector").contains("apocalypse")) { serverLeftSeparator.setTranslateY(130); showApocalypseMenu(topPanel);}
-            else if (saver.get("serverSelector").contains("oneblock")) { serverLeftSeparator.setTranslateY(195); showOneblockMenu(topPanel);}
-            else serverLeftSeparator.setTranslateY(0);
+            if (saver.get("serverSelector").contains("skyblock")) {
+                serverLeftSeparator.setTranslateY(0);
+                showSkyblockMenu(topPanel);
+            } else if (saver.get("serverSelector").contains("survival")) {
+                serverLeftSeparator.setTranslateY(65);
+                showSurvivalMenu(topPanel);
+            } else if (saver.get("serverSelector").contains("apocalypse")) {
+                serverLeftSeparator.setTranslateY(130);
+                showApocalypseMenu(topPanel);
+            } else if (saver.get("serverSelector").contains("oneblock")) {
+                serverLeftSeparator.setTranslateY(195);
+                showOneblockMenu(topPanel);
+            } else serverLeftSeparator.setTranslateY(0);
         } catch (NullPointerException e) {
             logger.warn(e.getMessage());
             serverLeftSeparator.setTranslateY(0);
@@ -776,7 +810,6 @@ public class App extends Panel {
         });
 
 
-
         pane.getChildren().addAll(serverLeftSeparator, skyblockView, skyblockLabel,
                 survivalView, survivalLabel,
                 apocalypseView, apocalypseLabel,
@@ -784,16 +817,63 @@ public class App extends Panel {
 
     }
 
+    public void showImageSlider(GridPane pane) {
+        GridPane pane1 = new GridPane();
+        GridPane.setHgrow(pane1, Priority.ALWAYS);
+        GridPane.setVgrow(pane1, Priority.ALWAYS);
+        pane1.setTranslateX(450);
+        pane1.setTranslateY(50);
+
+        ImageView imgView1 = new ImageView();
+        imgView1.setImage(new Image("images/skyblock/item1.png"));
+        imgView1.setPreserveRatio(true);
+        imgView1.setFitHeight(200d);
+        imgView1.setPreserveRatio(true);
+
+        ImageView imgView2 = new ImageView();
+        imgView2.setImage(new Image("images/skyblock/item2.png"));
+        imgView2.setPreserveRatio(true);
+        imgView2.setFitHeight(200d);
+        imgView2.setPreserveRatio(true);
+
+        Button nextItem = new Button();
+        GridPane.setVgrow(nextItem, Priority.ALWAYS);
+        GridPane.setHgrow(nextItem, Priority.ALWAYS);
+        GridPane.setValignment(nextItem, VPos.TOP);
+        setLeft(nextItem);
+        MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.ARROW_RIGHT_BOLD);
+        settingsIcon.setSize("18px");
+        settingsIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
+        nextItem.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color:" + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
+        nextItem.setTranslateX(220);
+        nextItem.setTranslateY(322);
+        nextItem.setMinWidth(26);
+        nextItem.setMaxWidth(26);
+        nextItem.setMinHeight(26);
+        nextItem.setMaxHeight(26);
+        nextItem.setGraphic(settingsIcon);
+        nextItem.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
+        nextItem.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
+        nextItem.setOnMouseClicked(e -> {
+            logger.info("TA GROSSE DARRONE JE SUIS BIEN CLICK");
+        });
+
+        pane1.getChildren().addAll(imgView1, nextItem);
+
+        pane.getChildren().add(pane1);
+    }
+
     // Update and Start game
     public void play(GridPane pane, String serverName) {
         new MinecraftLaunching(pane, progressBar, stepLabel, isDownloading, panelManager, saver, serverName);
+        this.isDownloading = true;
     }
 
     public String avatarUrl() {
         if (saver.get("offline-username") != null) {
             return Constants.AVATAR_URL + "MHF_STEVE";
         } else {
-            return Constants.AVATAR_URL + Launcher.getInstance().getAuthInfos().getUsername();
+            return Constants.AVATAR_URL + Launcher.getInstance().getAuthInfos();
         }
     }
 }
