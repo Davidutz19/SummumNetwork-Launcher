@@ -3,7 +3,6 @@ package fr.summumgames.launcher.ui.panels.pages;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import fr.summumgames.launcher.Launcher;
-import fr.summumgames.launcher.Main;
 import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panel.Panel;
@@ -19,9 +18,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
+
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -40,7 +41,7 @@ public class App extends Panel {
 
     private GridPane centerPane = new GridPane();
     private GridPane appPane = new GridPane();
-    private GridPane topPanel = new GridPane();
+    //    private GridPane topPanel = new GridPane();
     private GridPane backgroundImage = new GridPane();
 
     private String showedMenu;
@@ -63,6 +64,10 @@ public class App extends Panel {
 
     @Override
     public void init(PanelManager panelManager) {
+//        centerPane.setStyle("-fx-background-color: #fff");
+//        appPane.setStyle("-fx-background-color: #ff6500");
+//        topPanel.setStyle("-fx-background-color: #000");
+
         super.init(panelManager);
 
         setCanTakeAllSize(backgroundImage);
@@ -90,20 +95,12 @@ public class App extends Panel {
         rightSeparator.setMaxWidth(2);
         rightSeparator.setOpacity(0.30D);
 
-        GridPane.setVgrow(topPanel, Priority.ALWAYS);
-        GridPane.setHgrow(topPanel, Priority.ALWAYS);
-        GridPane.setValignment(topPanel, VPos.TOP);
-        topPanel.setMinWidth(950);
-        topPanel.setMinHeight(340);
-        topPanel.setMaxHeight(340);
-        topPanel.setTranslateX(50);
-
-        centerPane.getChildren().add(topPanel);
-
         this.appPane.add(leftBarPane, 1, 0);
         this.appPane.add(this.centerPane, 2, 0);
         GridPane.setVgrow(centerPane, Priority.ALWAYS);
         GridPane.setHgrow(centerPane, Priority.ALWAYS);
+        centerPane.setMinWidth(950);
+        centerPane.setMinHeight(340);
 
         this.layout.getChildren().add(appPane);
 
@@ -130,7 +127,7 @@ public class App extends Panel {
         topGridPane.setMaxWidth(5000);
 
         showPlayerBar(bottomGridPane);
-        showServerList(topGridPane, topPanel);
+        showServerList(topGridPane, centerPane);
         leftBarPane.getChildren().addAll(rightSeparator, bottomGridPane, topGridPane);
 
     }
@@ -151,18 +148,18 @@ public class App extends Panel {
         GridPane.setVgrow(imgView, Priority.ALWAYS);
         GridPane.setValignment(imgView, VPos.TOP);
         imgView.setTranslateY(20);
-        imgView.setTranslateX(0);
-        setLeft(imgView);
+        imgView.setTranslateX(-390);
+        setCenterH(imgView);
         imgView.setPreserveRatio(true);
 
-        Label title = new Label("SkyBlock");
+        Label title = new Label("Skyblock");
         GridPane.setVgrow(title, Priority.ALWAYS);
         GridPane.setHgrow(title, Priority.ALWAYS);
         GridPane.setValignment(title, VPos.TOP);
-        setLeft(title);
+        setCenterH(title);
         title.setStyle("-fx-font-size: 50px; -fx-text-fill: #fff; -fx-font-weight: bold;");
         title.setTranslateY(30);
-        title.setTranslateX(115);
+        title.setTranslateX(-215);
 
         Label desc = new Label("Le skyblock est le mode de jeu principal de SummumNetwork. \n" +
                 "Celui-ci est un jeu dans lequel vous devez développer votre île \n" +
@@ -176,18 +173,18 @@ public class App extends Panel {
         GridPane.setVgrow(desc, Priority.ALWAYS);
         GridPane.setHgrow(desc, Priority.ALWAYS);
         GridPane.setValignment(desc, VPos.TOP);
-        setLeft(desc);
+        setCenterH(desc);
         desc.setStyle("-fx-font-size: 14px; -fx-text-fill: #fff; -fx-opacity: 90%;");
         desc.setTranslateY(130);
-        desc.setTranslateX(10);
+        desc.setTranslateX(-250);
 
         Button playButton = new Button("Jouer");
         GridPane.setVgrow(playButton, Priority.ALWAYS);
         GridPane.setHgrow(playButton, Priority.ALWAYS);
         GridPane.setValignment(playButton, VPos.TOP);
-        setLeft(playButton);
+        setCenterH(playButton);
         playButton.setTranslateY(315);
-        playButton.setTranslateX(70);
+        playButton.setTranslateX(-310);
         playButton.setMinWidth(140);
         playButton.setMaxHeight(40);
         playButton.setStyle("-fx-background-color: " + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 0; -fx-background-insets: 0; -fx-font-size: 14px; -fx-text-fill: #fff");
@@ -202,12 +199,12 @@ public class App extends Panel {
         GridPane.setVgrow(settingsButton, Priority.ALWAYS);
         GridPane.setHgrow(settingsButton, Priority.ALWAYS);
         GridPane.setValignment(settingsButton, VPos.TOP);
-        setLeft(settingsButton);
+        setCenterH(settingsButton);
         MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.SETTINGS);
         settingsIcon.setSize("18px");
         settingsIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
         settingsButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color:" + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
-        settingsButton.setTranslateX(220);
+        settingsButton.setTranslateX(-220);
         settingsButton.setTranslateY(322);
         settingsButton.setMinWidth(26);
         settingsButton.setMaxWidth(26);
@@ -218,7 +215,7 @@ public class App extends Panel {
         settingsButton.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         settingsButton.setOnMouseClicked(e -> {
             if (!this.isDownloading) {
-                topPanel.getChildren().clear();
+                centerPane.getChildren().clear();
                 showSettingsMenu(pane);
             }
         });
@@ -227,21 +224,25 @@ public class App extends Panel {
         GridPane.setVgrow(progressBar, Priority.ALWAYS);
         GridPane.setHgrow(progressBar, Priority.ALWAYS);
         GridPane.setValignment(progressBar, VPos.TOP);
-        setLeft(progressBar);
+        setCenterH(progressBar);
         progressBar.setMinWidth(230);
         progressBar.setTranslateY(365);
-        progressBar.setTranslateX(40);
+        progressBar.setTranslateX(-295);
 
         stepLabel.setStyle("-fx-text-fill: rgba(255, 255, 255);");
         GridPane.setVgrow(stepLabel, Priority.ALWAYS);
         GridPane.setHgrow(stepLabel, Priority.ALWAYS);
         GridPane.setValignment(stepLabel, VPos.TOP);
-        setLeft(stepLabel);
+        setCenterH(stepLabel);
         stepLabel.setMinWidth(450);
         stepLabel.setTranslateY(385);
-        stepLabel.setTranslateX(42);
+        stepLabel.setTranslateX(-190);
 
-        showImageSlider(pane);
+        ArrayList<Image> content = new ArrayList<>();
+        content.add(new Image("images/skyblock/item1.png"));
+        content.add(new Image("images/skyblock/item2.png"));
+
+        showImageSlider(pane, content);
 
         pane.getChildren().addAll(title, imgView, desc, playButton, settingsButton);
     }
@@ -313,7 +314,7 @@ public class App extends Panel {
             if (showedMenu == "survival" && this.isDownloading) {
                 return;
             }
-            topPanel.getChildren().clear();
+            centerPane.getChildren().clear();
             showSettingsMenu(pane);
         });
 
@@ -399,7 +400,7 @@ public class App extends Panel {
             if (showedMenu == "apocalypse" && this.isDownloading) {
                 return;
             }
-            topPanel.getChildren().clear();
+            centerPane.getChildren().clear();
             showSettingsMenu(pane);
         });
 
@@ -483,7 +484,7 @@ public class App extends Panel {
             if (showedMenu == "oneblock" && this.isDownloading) {
                 return;
             }
-            topPanel.getChildren().clear();
+            centerPane.getChildren().clear();
             showSettingsMenu(pane);
         });
 
@@ -579,7 +580,7 @@ public class App extends Panel {
             _val *= 1024;
             saver.set("maxRam", String.valueOf((int) _val));
             saver.save();
-            topPanel.getChildren().clear();
+            centerPane.getChildren().clear();
             showSkyblockMenu(pane);
         });
 
@@ -656,7 +657,7 @@ public class App extends Panel {
         pane.getChildren().addAll(blueLeftSeparator, avatarView, playerNameLabel, logoutButton);
     }
 
-    public void showServerList(GridPane pane, GridPane topPanel) {
+    public void showServerList(GridPane pane, GridPane centerPane) {
 
         Separator serverLeftSeparator = new Separator();
         GridPane.setVgrow(serverLeftSeparator, Priority.ALWAYS);
@@ -670,21 +671,20 @@ public class App extends Panel {
         try {
             if (saver.get("serverSelector").contains("skyblock")) {
                 serverLeftSeparator.setTranslateY(0);
-                showSkyblockMenu(topPanel);
+                showSkyblockMenu(centerPane);
             } else if (saver.get("serverSelector").contains("survival")) {
                 serverLeftSeparator.setTranslateY(65);
-                showSurvivalMenu(topPanel);
+                showSurvivalMenu(centerPane);
             } else if (saver.get("serverSelector").contains("apocalypse")) {
                 serverLeftSeparator.setTranslateY(130);
-                showApocalypseMenu(topPanel);
+                showApocalypseMenu(centerPane);
             } else if (saver.get("serverSelector").contains("oneblock")) {
                 serverLeftSeparator.setTranslateY(195);
-                showOneblockMenu(topPanel);
+                showOneblockMenu(centerPane);
             } else serverLeftSeparator.setTranslateY(0);
         } catch (NullPointerException e) {
-            logger.warn(e.getMessage());
             serverLeftSeparator.setTranslateY(0);
-            showSkyblockMenu(topPanel);
+            showSkyblockMenu(centerPane);
         }
 
         ImageView skyblockView = new ImageView();
@@ -710,8 +710,8 @@ public class App extends Panel {
         skyblockLabel.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         skyblockLabel.setOnMouseClicked(e -> {
             serverLeftSeparator.setTranslateY(0);
-            topPanel.getChildren().clear();
-            showSkyblockMenu(topPanel);
+            centerPane.getChildren().clear();
+            showSkyblockMenu(centerPane);
             saver.set("serverSelector", "skyblock");
             saver.save();
         });
@@ -741,8 +741,8 @@ public class App extends Panel {
         survivalLabel.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         survivalLabel.setOnMouseClicked(e -> {
             serverLeftSeparator.setTranslateY(65);
-            topPanel.getChildren().clear();
-            showSurvivalMenu(topPanel);
+            centerPane.getChildren().clear();
+            showSurvivalMenu(centerPane);
             saver.set("serverSelector", "survival");
             saver.save();
         });
@@ -773,8 +773,8 @@ public class App extends Panel {
         apocalypseLabel.setOnMouseClicked(e -> {
             serverLeftSeparator.setTranslateY(130);
             saver.set("serverSelector", "apocalypse");
-            topPanel.getChildren().clear();
-            showApocalypseMenu(topPanel);
+            centerPane.getChildren().clear();
+            showApocalypseMenu(centerPane);
             saver.save();
         });
 
@@ -804,8 +804,8 @@ public class App extends Panel {
         oneblockLabel.setOnMouseClicked(e -> {
             serverLeftSeparator.setTranslateY(195);
             saver.set("serverSelector", "oneblock");
-            topPanel.getChildren().clear();
-            showOneblockMenu(topPanel);
+            centerPane.getChildren().clear();
+            showOneblockMenu(centerPane);
             saver.save();
         });
 
@@ -817,50 +817,45 @@ public class App extends Panel {
 
     }
 
-    public void showImageSlider(GridPane pane) {
-        GridPane pane1 = new GridPane();
-        GridPane.setHgrow(pane1, Priority.ALWAYS);
-        GridPane.setVgrow(pane1, Priority.ALWAYS);
-        pane1.setTranslateX(450);
-        pane1.setTranslateY(50);
+    public void showImageSlider(GridPane pane, ArrayList<Image> content) {
 
-        ImageView imgView1 = new ImageView();
-        imgView1.setImage(new Image("images/skyblock/item1.png"));
-        imgView1.setPreserveRatio(true);
-        imgView1.setFitHeight(200d);
-        imgView1.setPreserveRatio(true);
+        ImageView imgView = new ImageView();
+        imgView.setImage(content.get(0));
+        imgView.setPreserveRatio(true);
+        imgView.setFitHeight(230d);
+        imgView.setPreserveRatio(true);
+        imgView.setTranslateX(190);
+        imgView.setTranslateY(100);
+        setCenterH(imgView);
+        setTop(imgView);
 
-        ImageView imgView2 = new ImageView();
-        imgView2.setImage(new Image("images/skyblock/item2.png"));
-        imgView2.setPreserveRatio(true);
-        imgView2.setFitHeight(200d);
-        imgView2.setPreserveRatio(true);
+        AtomicInteger imageDisplayed = new AtomicInteger(0);
 
         Button nextItem = new Button();
-        GridPane.setVgrow(nextItem, Priority.ALWAYS);
-        GridPane.setHgrow(nextItem, Priority.ALWAYS);
-        GridPane.setValignment(nextItem, VPos.TOP);
-        setLeft(nextItem);
-        MaterialDesignIconView settingsIcon = new MaterialDesignIconView(MaterialDesignIcon.ARROW_RIGHT_BOLD);
-        settingsIcon.setSize("18px");
-        settingsIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
+        setTop(nextItem);
+        setCenterH(nextItem);
+        MaterialDesignIconView nextItemIcon = new MaterialDesignIconView(MaterialDesignIcon.ARROW_RIGHT_BOLD);
+        nextItemIcon.setSize("18px");
+        nextItemIcon.setFill(Constants.LAUNCHER_COLOR_RGB);
         nextItem.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-border-color:" + Constants.LAUNCHER_COLOR + "; -fx-border-radius: 2px;");
-        nextItem.setTranslateX(220);
-        nextItem.setTranslateY(322);
         nextItem.setMinWidth(26);
         nextItem.setMaxWidth(26);
         nextItem.setMinHeight(26);
         nextItem.setMaxHeight(26);
-        nextItem.setGraphic(settingsIcon);
+        nextItem.setTranslateX((imgView.getTranslateX() + 180));
+        nextItem.setTranslateY((imgView.getTranslateY() + 100));
+        nextItem.setGraphic(nextItemIcon);
         nextItem.setOnMouseEntered(e -> this.appPane.setCursor(Cursor.HAND));
         nextItem.setOnMouseExited(e -> this.appPane.setCursor(Cursor.DEFAULT));
         nextItem.setOnMouseClicked(e -> {
-            logger.info("TA GROSSE DARRONE JE SUIS BIEN CLICK");
+            imageDisplayed.incrementAndGet();
+
+            if (imageDisplayed.get() == (content.size())) imageDisplayed.set(0);
+
+            imgView.setImage(content.get(imageDisplayed.get()));
         });
 
-        pane1.getChildren().addAll(imgView1, nextItem);
-
-        pane.getChildren().add(pane1);
+        pane.getChildren().addAll(imgView, nextItem);
     }
 
     // Update and Start game
@@ -873,7 +868,7 @@ public class App extends Panel {
         if (saver.get("offline-username") != null) {
             return Constants.AVATAR_URL + "MHF_STEVE";
         } else {
-            return Constants.AVATAR_URL + Launcher.getInstance().getAuthInfos();
+            return Constants.AVATAR_URL + Launcher.getInstance().getAuthInfos().getUuid();
         }
     }
 }

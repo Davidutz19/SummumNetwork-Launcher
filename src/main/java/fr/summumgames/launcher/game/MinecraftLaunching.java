@@ -143,7 +143,7 @@ public class MinecraftLaunching {
             @Override
             public void step(Step step) {
                 Platform.runLater(() -> {
-                    stepTxt = StepInfo.  valueOf(step.name()).getDetails();
+                    stepTxt = StepInfo.valueOf(step.name()).getDetails();
                     setStatus(String.format("%s, (%s)", stepTxt, percentTxt));
                 });
             }
@@ -302,16 +302,16 @@ public class MinecraftLaunching {
         return isDownloading;
     }
     public enum StepInfo {
-        READ("Lecture du fichier json..."),
-        DL_LIBS("Téléchargement des libraries..."),
-        DL_ASSETS("Téléchargement des ressources..."),
-        EXTRACT_NATIVES("Extraction des natives..."),
-        FORGE("Installation de forge..."),
-        FABRIC("Installation de fabric..."),
-        MODS("Téléchargement des mods..."),
+        READ("Récupération des données de jeu..."),
+        DL_LIBS("Téléchargement de Minecraft..."),
+        DL_ASSETS("Téléchargement des données de jeu..."),
+        EXTRACT_NATIVES("Extraction des autres donnés..."),
+        FORGE("Installation de SummumNetwork..."),
+        FABRIC("Installation de SummumNetwork..."),
+        MODS("Téléchargement des mise à jour..."),
         EXTERNAL_FILES("Téléchargement des fichier externes..."),
-        POST_EXECUTIONS("Exécution post-installation..."),
-        END("Finit !");
+        POST_EXECUTIONS("Mise à jour terminé..."),
+        END("Lancement du Jeu !");
         String details;
 
         StepInfo(String details) {

@@ -67,6 +67,7 @@ public class AuthMineweb {
             }
             in.close();
         } catch (Exception e) {
+            errorLabel.setText("Impossible de se connectez au serveur de authentification");
             logger.warn(e.getMessage());
         }
     }
