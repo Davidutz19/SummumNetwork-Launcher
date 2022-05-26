@@ -12,7 +12,6 @@ import fr.flowarg.flowupdater.utils.UpdaterOptions;
 import fr.flowarg.flowupdater.versions.AbstractForgeVersion;
 import fr.flowarg.flowupdater.versions.ForgeVersionBuilder;
 import fr.flowarg.flowupdater.versions.VanillaVersion;
-import fr.flowarg.flowupdater.versions.VersionType;
 import fr.flowarg.openlauncherlib.NewForgeVersionDiscriminator;
 import fr.summumgames.launcher.Launcher;
 import fr.summumgames.launcher.ui.PanelManager;
@@ -26,7 +25,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -72,13 +70,12 @@ public class MinecraftLaunching {
     public void updateMinecraftInfos(String serverName) {
         if (serverName.contains("skyblock")) {
             minecraftInfos.GAME_VERSION = "1.16.5";
-            minecraftInfos.VERSION_TYPE = VersionType.FORGE;
             minecraftInfos.FORGE_VERSION_TYPE = ForgeVersionBuilder.ForgeVersionType.NEW;
-            minecraftInfos.FORGE_VERSION = "1.16.5-36.2.20";
+            minecraftInfos.FORGE_VERSION = "1.16.5-36.2.34";
             minecraftInfos.OPTIFINE_VERSION = "1.16.5_HD_U_G8";
             minecraftInfos.OLL_GAME_TYPE = GameType.V1_13_HIGHER_FORGE;
             minecraftInfos.OLL_FORGE_DISCRIMINATOR = new NewForgeVersionDiscriminator(
-                    "36.2.20",
+                    "36.2.34",
                     minecraftInfos.GAME_VERSION,
                     "20210115.111550"
             );
@@ -88,7 +85,6 @@ public class MinecraftLaunching {
         }
         else if (serverName.contains("survival")) {
             minecraftInfos.GAME_VERSION = "1.16.5";
-            minecraftInfos.VERSION_TYPE = VersionType.FORGE;
             minecraftInfos.FORGE_VERSION_TYPE = ForgeVersionBuilder.ForgeVersionType.NEW;
             minecraftInfos.FORGE_VERSION = "1.16.5-36.2.2";
             minecraftInfos.OPTIFINE_VERSION = "1.16.5_HD_U_G8";
@@ -102,7 +98,6 @@ public class MinecraftLaunching {
         }
         else if (serverName.contains("apocalypse")) {
             minecraftInfos.GAME_VERSION = "1.12.2";
-            minecraftInfos.VERSION_TYPE = VersionType.FORGE;
             minecraftInfos.FORGE_VERSION_TYPE = ForgeVersionBuilder.ForgeVersionType.NEW;
             minecraftInfos.FORGE_VERSION = "1.12.2-14.23.5.2860";
             minecraftInfos.OPTIFINE_VERSION = "1.12.2_HD_U_G5";
@@ -111,7 +106,6 @@ public class MinecraftLaunching {
         }
         else if (serverName.contains("oneblock")) {
             minecraftInfos.GAME_VERSION = "1.16.5";
-            minecraftInfos.VERSION_TYPE = VersionType.FORGE;
             minecraftInfos.FORGE_VERSION_TYPE = ForgeVersionBuilder.ForgeVersionType.NEW;
             minecraftInfos.FORGE_VERSION = "1.16.5-36.2.2";
             minecraftInfos.OPTIFINE_VERSION = "1.16.5_HD_U_G8";
@@ -160,7 +154,6 @@ public class MinecraftLaunching {
         try {
             final VanillaVersion vanillaVersion = new VanillaVersion.VanillaVersionBuilder()
                     .withName(minecraftInfos.GAME_VERSION)
-                    .withVersionType(minecraftInfos.VERSION_TYPE)
                     .build();
             final UpdaterOptions options = new UpdaterOptions.UpdaterOptionsBuilder()
                     .build();
@@ -183,7 +176,7 @@ public class MinecraftLaunching {
 
             final FlowUpdater updater = new FlowUpdater.FlowUpdaterBuilder()
                     .withVanillaVersion(vanillaVersion)
-                    .withForgeVersion(forge)
+                    .withModLoaderVersion(forge)
                     .withLogger(Launcher.getInstance().getLogger())
                     .withProgressCallback(callback)
                     .withUpdaterOptions(options)
@@ -195,7 +188,7 @@ public class MinecraftLaunching {
             else if (serverName.contains("oneblock")) updater.update(Launcher.getInstance().getOneblockDir());
             else {Platform.exit(); System.exit(1);}
             
-            this.startGame(updater.getForgeVersion().getForgeVersion());
+            this.startGame(updater.getVanillaVersion().getName());
         } catch (Exception exception) {
             Launcher.getInstance().getLogger().err(exception.toString());
             exception.printStackTrace();
@@ -205,13 +198,13 @@ public class MinecraftLaunching {
 
     public void startGame(String gameVersion) {
         
-        File gameFolder = null;
+        Path gameFolder = null;
         GameInfos infos;
 
-        if (serverName.contains("skyblock")) gameFolder = Launcher.getInstance().getSkyblockDir().toFile();
-        else if (serverName.contains("survival")) gameFolder = Launcher.getInstance().getSurvivalDir().toFile();
-        else if (serverName.contains("apocalypse")) gameFolder = Launcher.getInstance().getApocalypseDir().toFile();
-        else if (serverName.contains("oneblock")) gameFolder = Launcher.getInstance().getOneblockDir().toFile();
+        if (serverName.contains("skyblock")) gameFolder = Launcher.getInstance().getSkyblockDir();
+        else if (serverName.contains("survival")) gameFolder = Launcher.getInstance().getSurvivalDir();
+        else if (serverName.contains("apocalypse")) gameFolder = Launcher.getInstance().getApocalypseDir();
+        else if (serverName.contains("oneblock")) gameFolder = Launcher.getInstance().getOneblockDir();
         else {Platform.exit(); System.exit(1);}
 
         if (serverName.contains("skyblock")) {
@@ -301,17 +294,19 @@ public class MinecraftLaunching {
     public boolean isDownloading() {
         return isDownloading;
     }
+
     public enum StepInfo {
+        INTEGRATION("Chargement des intégrations..."),
         READ("Récupération des données de jeu..."),
         DL_LIBS("Téléchargement de Minecraft..."),
         DL_ASSETS("Téléchargement des données de jeu..."),
         EXTRACT_NATIVES("Extraction des autres donnés..."),
-        FORGE("Installation de SummumNetwork..."),
-        FABRIC("Installation de SummumNetwork..."),
+        MOD_LOADER("Installation du Mod Loader..."),
         MODS("Téléchargement des mise à jour..."),
         EXTERNAL_FILES("Téléchargement des fichier externes..."),
         POST_EXECUTIONS("Mise à jour terminé..."),
         END("Lancement du Jeu !");
+
         String details;
 
         StepInfo(String details) {

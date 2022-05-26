@@ -45,11 +45,10 @@ public class Launcher extends Application {
     public static Launcher instance;
     private final ILogger logger;
     private final Path launcherDir = GameDirGenerator.createGameDir(Constants.LAUNCHER_NAME, false);
-    private final Path skyblockDir = Paths.get(String.valueOf(launcherDir), "SkyBlock");
-    private final Path survivalDir = Paths.get(String.valueOf(launcherDir), "Survival");
-    private final Path apocalypseDir = Paths.get(String.valueOf(launcherDir), "Apocalypse");
-    private final Path oneblockDir = Paths.get(String.valueOf(launcherDir), "OneBlock");
-    private final Path minigamesDir = Paths.get(String.valueOf(launcherDir), "MiniGames");
+    private final Path skyblockDir = launcherDir.resolve("Skyblock");
+    private final Path survivalDir = launcherDir.resolve("Survie");
+    private final Path apocalypseDir = launcherDir.resolve("Apocalypse");
+    private final Path oneblockDir = launcherDir.resolve("Oneblock");
     private final Saver saver;
 
     private AuthInfos authInfos = null;
@@ -164,10 +163,6 @@ public class Launcher extends Application {
 
     public Path getOneblockDir() {
         return oneblockDir;
-    }
-
-    public Path getMinigamesDir() {
-        return minigamesDir;
     }
 
     public void Stop() {

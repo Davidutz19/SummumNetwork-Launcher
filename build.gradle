@@ -23,7 +23,7 @@ dependencies {
 
     implementation 'de.jensd:fontawesomefx:8+'
 
-    implementation 'fr.flowarg:flowupdater:1.5+'
+    implementation 'fr.flowarg:flowupdater:1.7.0'
     implementation 'fr.flowarg:openlauncherlib:3+'
 
     implementation 'com.github.goxr3plus:FX-BorderlessScene:4+'
