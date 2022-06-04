@@ -2,8 +2,8 @@ fr/summumgames/launcher/runtime/UrlRuntimeGenerator.java
  fr.summumgames.launcher.runtime.UrlRuntimeGenerator
 fr/summumgames/launcher/ui/PanelManager.java
  fr.summumgames.launcher.ui.PanelManager
-fr/summumgames/launcher/ui/panels/pages/App.java
- fr.summumgames.launcher.ui.panels.pages.App
+fr/summumgames/launcher/auth/AuthMineweb.java
+ fr.summumgames.launcher.auth.AuthMineweb
 fr/summumgames/launcher/ui/panels/partials/TopBar.java
  fr.summumgames.launcher.ui.panels.partials.TopBar
 fr/summumgames/launcher/auth/AuthMicrosoft.java
@@ -22,13 +22,13 @@ fr/summumgames/launcher/ui/panel/ITakePlace.java
  fr.summumgames.launcher.ui.panel.ITakePlace
 fr/summumgames/launcher/ui/panel/Panel.java
  fr.summumgames.launcher.ui.panel.Panel
+fr/summumgames/launcher/ui/panel/IMovable.java
+ fr.summumgames.launcher.ui.panel.IMovable
+fr/summumgames/launcher/ui/panels/pages/Login.java
+ fr.summumgames.launcher.ui.panels.pages.Login
+fr/summumgames/launcher/ui/panels/pages/App.java
+ fr.summumgames.launcher.ui.panels.pages.App
 fr/summumgames/launcher/game/MinecraftLaunching.java
  fr.summumgames.launcher.game.MinecraftLaunching
  fr.summumgames.launcher.game.MinecraftLaunching$1
  fr.summumgames.launcher.game.MinecraftLaunching$StepInfo
-fr/summumgames/launcher/ui/panels/pages/Login.java
- fr.summumgames.launcher.ui.panels.pages.Login
-fr/summumgames/launcher/ui/panel/IMovable.java
- fr.summumgames.launcher.ui.panel.IMovable
-fr/summumgames/launcher/auth/AuthMineweb.java
- fr.summumgames.launcher.auth.AuthMineweb
