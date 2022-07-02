@@ -1,20 +1,16 @@
 package fr.summumgames.launcher;
 
 import fr.summumgames.launcher.auth.AuthMineweb;
-import fr.summumgames.launcher.runtime.UrlRuntimeGenerator;
+import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panels.pages.App;
 import fr.summumgames.launcher.ui.panels.pages.Login;
 import fr.summumgames.launcher.utils.Constants;
 import fr.flowarg.flowlogger.ILogger;
 import fr.flowarg.flowlogger.Logger;
-import fr.litarvan.openauth.AuthPoints;
-import fr.litarvan.openauth.AuthenticationException;
-import fr.litarvan.openauth.Authenticator;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
-import fr.litarvan.openauth.model.response.RefreshResponse;
 import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.minecraft.util.GameDirGenerator;
 import fr.theshark34.openlauncherlib.util.Saver;
@@ -24,8 +20,6 @@ import javafx.stage.Stage;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  *
@@ -44,7 +38,7 @@ public class Launcher extends Application {
     private PanelManager panelManager;
     public static Launcher instance;
     private final ILogger logger;
-    private final Path launcherDir = GameDirGenerator.createGameDir(Constants.LAUNCHER_NAME, false);
+    private final Path launcherDir = GameDirGenerator.createGameDir(Constants.LAUNCHER_NAME, true);
     private final Path skyblockDir = launcherDir.resolve("Skyblock");
     private final Path survivalDir = launcherDir.resolve("Survie");
     private final Path apocalypseDir = launcherDir.resolve("Apocalypse");
@@ -56,7 +50,6 @@ public class Launcher extends Application {
     public Launcher() {
         instance = this;
         this.logger = new Logger("[SummumNetworkLauncher]", Paths.get(this.launcherDir.toString(), "launcher.log"));
-        this.logger.info(UrlRuntimeGenerator.getRuntimeUrl(8));
         if (!this.launcherDir.toFile().exists()) {
             if (!this.launcherDir.toFile().mkdir()) {
                 this.logger.err("Unable to create launcher folder");
@@ -75,7 +68,7 @@ public class Launcher extends Application {
         this.panelManager.init();
 
         if (this.isUserAlreadyLoggedIn()) {
-            logger.info("Hello" + " " + authInfos.getUsername() + " !");
+            logger.info("Hello " + authInfos.getUsername() + " !");
             panelManager.showPanel(new App());
         }else {
             this.panelManager.showPanel(new Login());
@@ -166,6 +159,10 @@ public class Launcher extends Application {
     }
 
     public void Stop() {
+        logger.info("Stopping Launcher");
+        try {
+            MinecraftLaunching.instance.getT().interrupt();
+        } catch (NullPointerException e) { logger.info("POINT"); }
         Platform.exit();
         System.exit(0);
     }

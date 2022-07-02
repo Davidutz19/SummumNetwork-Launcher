@@ -260,6 +260,7 @@ public class Login extends Panel {
         conectionButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         conectionButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         conectionButton.setOnMouseClicked(e -> {
+            errorLabel.setText(" ");
             if (connectWithMicrosoft.get()) {
                 conectionButton.setDisable(true);
                 if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {

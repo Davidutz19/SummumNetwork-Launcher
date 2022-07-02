@@ -14,6 +14,7 @@ import fr.flowarg.flowupdater.versions.ForgeVersionBuilder;
 import fr.flowarg.flowupdater.versions.VanillaVersion;
 import fr.flowarg.openlauncherlib.NewForgeVersionDiscriminator;
 import fr.summumgames.launcher.Launcher;
+import fr.summumgames.launcher.enums.Urls;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.utils.Constants;
 import fr.theshark34.openlauncherlib.external.ExternalLaunchProfile;
@@ -28,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *
@@ -44,26 +46,29 @@ import java.util.List;
 
 public class MinecraftLaunching {
 
+    public static MinecraftLaunching instance;
     GridPane pane;
     ProgressBar progressBar;
     Label stepLabel;
-    Boolean isDownloading = false;
-    PanelManager panelManager;
+    private AtomicBoolean isDownloading = new AtomicBoolean(false);
+    PanelManager panelManager = PanelManager.instance;
     Saver saver;
     String serverName;
 
+    public Thread t = new Thread(this::update);
+
     MinecraftInfos minecraftInfos = new MinecraftInfos();
 
-    public MinecraftLaunching(GridPane pane, ProgressBar progressBar, Label stepLabel, Boolean isDownloading, PanelManager panelManager, Saver saver, String serverName) {
-
+    public MinecraftLaunching(GridPane pane, ProgressBar progressBar, Label stepLabel, Saver saver, String serverName) {
+        instance = this;
         this.pane = pane;
         this.progressBar = progressBar;
         this.stepLabel = stepLabel;
-        this.isDownloading = isDownloading;
-        this.panelManager = panelManager;
         this.saver = saver;
         this.serverName = serverName;
+    }
 
+    public void launchGame() {
         updateMinecraftInfos(serverName);
     }
 
@@ -79,8 +84,8 @@ public class MinecraftLaunching {
                     minecraftInfos.GAME_VERSION,
                     "20210115.111550"
             );
-            minecraftInfos.CURSE_MODS_LIST_URL = "https://dev.davidutz.ga/SummumNetwork/Skyblock/mods-list-skyblock.json";
-            minecraftInfos.MODS_LIST_URL = "https://dev.davidutz.ga/SummumNetwork/Skyblock/mods-list-skyblock.json";
+            minecraftInfos.CURSE_MODS_LIST_URL = Urls.SKYBLOCK_MAIN_MODS.getUrl();
+            minecraftInfos.MODS_LIST_URL = Urls.SKYBLOCK_MAIN_MODS.getUrl();
             play(pane);
         }
         else if (serverName.contains("survival")) {
@@ -120,11 +125,11 @@ public class MinecraftLaunching {
     }
 
     public void play(GridPane pane) {
-        isDownloading = true;
+        setIsDownloading(true);
         setProgress(0, 0);
         pane.getChildren().addAll(progressBar, stepLabel);
 
-        Platform.runLater(() -> new Thread(this::update).start());
+        Platform.runLater(() -> t.start());
     }
 
     public void update() {
@@ -164,6 +169,19 @@ public class MinecraftLaunching {
             if (serverName.contains("skyblock")) {
                 curseMods = CurseFileInfo.getFilesFromJson(minecraftInfos.CURSE_MODS_LIST_URL);
                 mods = Mod.getModsFromJson(minecraftInfos.MODS_LIST_URL);
+
+                //Optional Mod
+                if (saver.get("skyblockOptionalReplaymod").equals("true")) {
+                    for (Mod m : Mod.getModsFromJson(Urls.SKYBLOCK_REPLAYMOD.getUrl())) {
+                        mods.add(m);
+                    }
+                }
+                if (saver.get("skyblockOptionalLitematica").equals("true")) {
+                    for (Mod m : Mod.getModsFromJson(Urls.SKYBLOCK_LITEMATICA.getUrl())) {
+                        mods.add(m);
+                    }
+                }
+
             }
 
             final AbstractForgeVersion forge = new ForgeVersionBuilder(minecraftInfos.FORGE_VERSION_TYPE)
@@ -193,6 +211,7 @@ public class MinecraftLaunching {
             Launcher.getInstance().getLogger().err(exception.toString());
             exception.printStackTrace();
             Platform.runLater(() -> panelManager.getStage().show());
+            Platform.runLater(() -> this.stepLabel.setText("Impossible de récuperer les données de jeu"));
         }
     }
 
@@ -256,7 +275,6 @@ public class MinecraftLaunching {
             Platform.runLater(() -> {
                 try {
                     p.waitFor();
-                    Platform.exit();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -292,7 +310,15 @@ public class MinecraftLaunching {
     }
 
     public boolean isDownloading() {
-        return isDownloading;
+        return isDownloading.get();
+    }
+
+    public void setIsDownloading(boolean bool) {
+        isDownloading.set(bool);
+    }
+
+    public Thread getT() {
+        return t;
     }
 
     public enum StepInfo {

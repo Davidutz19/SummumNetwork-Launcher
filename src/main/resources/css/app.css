@@ -25,6 +25,12 @@
     -fx-text-fill: #B8412D
 }
 
+.check-box .box {
+    -fx-background-color: rgba(0, 0, 0, 0.0);
+    -fx-border-color: #B8412D;
+    -fx-border-radius: 2px;
+}
+
 .check-box:selected .mark {
     -fx-background-color: #B8412D;
 }

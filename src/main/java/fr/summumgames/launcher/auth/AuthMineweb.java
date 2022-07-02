@@ -37,7 +37,6 @@ public class AuthMineweb {
 
     private ILogger logger = Launcher.getInstance().getLogger();
     private Saver saver = Launcher.getInstance().getSaver();
-
     private boolean connected = false;
     private String username;
     private String hash;
