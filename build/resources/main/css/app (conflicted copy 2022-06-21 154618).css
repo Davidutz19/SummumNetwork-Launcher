@@ -1,0 +1,36 @@
+.ramComboBox .arrow-button .arrow {
+    -fx-background-color: #B8412D;
+}
+
+.ramComboBox .list-view {
+    -fx-background-color: rgba(0, 0, 0, 0.0);
+    -fx-border-color: #B8412D;
+    -fx-border-radius: 2px;
+}
+
+.ramComboBox .list-cell {
+    -fx-background-color: rgba(0, 0, 0, 0.0);
+    -fx-text-fill: #ffffff
+}
+
+.ramComboBox .track {
+    -fx-background-color: rgba(0, 0, 0, 0.0);
+}
+
+.ramComboBox .thumb {
+    -fx-background-color: rgba(184, 65, 45);
+}
+
+.ramComboBox .list-cell:hover {
+    -fx-text-fill: #B8412D
+}
+
+.check-box .box {
+    -fx-background-color: rgba(0, 0, 0, 0.0);
+    -fx-border-color: #B8412D;
+    -fx-border-radius: 2px;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #B8412D;
+}
