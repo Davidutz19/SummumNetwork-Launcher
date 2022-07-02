@@ -171,12 +171,12 @@ public class MinecraftLaunching {
                 mods = Mod.getModsFromJson(minecraftInfos.MODS_LIST_URL);
 
                 //Optional Mod
-                if (saver.get("skyblockOptionalReplaymod").equals("true")) {
+                if (saver.get("skyblockOptionalReplaymod") != null && saver.get("skyblockOptionalReplaymod").equals("true")) {
                     for (Mod m : Mod.getModsFromJson(Urls.SKYBLOCK_REPLAYMOD.getUrl())) {
                         mods.add(m);
                     }
                 }
-                if (saver.get("skyblockOptionalLitematica").equals("true")) {
+                if (saver.get("skyblockOptionalLitematica") != null && saver.get("skyblockOptionalLitematica").equals("true")) {
                     for (Mod m : Mod.getModsFromJson(Urls.SKYBLOCK_LITEMATICA.getUrl())) {
                         mods.add(m);
                     }

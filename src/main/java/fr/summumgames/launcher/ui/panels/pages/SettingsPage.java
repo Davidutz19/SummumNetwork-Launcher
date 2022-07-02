@@ -213,6 +213,7 @@ public class SettingsPage extends Panel {
             saver.save();
             pane.getChildren().clear();
 
+            if (saver.get("serverSelector") == null) saver.set("serverSelector", "");
             switch (saver.get("serverSelector")) {
                 case "skyblock":
                     App.instance.showSkyblockPage();
@@ -226,7 +227,9 @@ public class SettingsPage extends Panel {
                 case "oneblock":
                     App.instance.showOneblockPage();
                     break;
-                default: App.instance.showSkyblockPage();
+                default:
+                    App.instance.showSkyblockPage();
+                    break;
             }
         });
 
