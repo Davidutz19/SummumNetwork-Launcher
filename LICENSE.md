@@ -18,7 +18,7 @@ Vous n'êtes PAS autorisé de:
 - Publier le fonctionnement des différents mécanismes de protection.
 - Comprendre le fonctionnement des différents mécanismes de protection dans le but de les déjouer.
 
-=========================
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 La licence et les conditions générales d'utilisation peuvent être changé à tout moment.
 
