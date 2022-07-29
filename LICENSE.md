@@ -22,4 +22,4 @@ Vous n'êtes PAS autorisé de:
 
 La licence et les conditions générales d'utilisation peuvent être changé à tout moment.
 
-Copyright 2022 - SummumNetwork©
+Copyright 2022 - SummumNetwork©. All right reserved
