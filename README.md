@@ -7,7 +7,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/BUILD-DEV-orange">
-    <img src="https://img.shields.io/badge/BUILD-DEV-orange"> 
+    <img src="https://img.shields.io/badge/VERSION-DEV-orange"> 
     <img src="https://img.shields.io/badge/DIST-WINDOWS%20--%20MAC%20--%20LINUX-orange">
 </p>
 
