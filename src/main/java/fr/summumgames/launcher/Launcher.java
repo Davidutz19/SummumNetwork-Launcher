@@ -162,7 +162,7 @@ public class Launcher extends Application {
         logger.info("Stopping Launcher");
         try {
             MinecraftLaunching.instance.getT().interrupt();
-        } catch (NullPointerException e) { logger.info("POINT"); }
+        } catch (NullPointerException e) {  }
         Platform.exit();
         System.exit(0);
     }

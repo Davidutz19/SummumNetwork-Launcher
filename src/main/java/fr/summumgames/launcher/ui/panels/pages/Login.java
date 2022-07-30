@@ -60,8 +60,6 @@ public class Login extends Panel {
     AuthMicrosoft authMicrosoft = new AuthMicrosoft();
     AuthMineweb authMineweb = new AuthMineweb();
 
-    AtomicBoolean connectWithMicrosoft = new AtomicBoolean(true);
-
     @Override
     public String getName() {
         return null;
@@ -131,11 +129,7 @@ public class Login extends Panel {
         registerHere.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         registerHere.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         registerHere.setOnMouseClicked(e -> {
-            if (connectWithMicrosoft.get()) {
-                openURL("https://www.minecraft.net/fr-fr/get-minecraft");
-            } else {
-                openURL(Constants.WEB_URL + "register");
-            }
+            openURL(Constants.WEB_URL + "register");
         });
 
         bottomPanel.getChildren().addAll(noAccount, registerHere);
@@ -159,7 +153,7 @@ public class Login extends Panel {
         connectSeparator.setMaxWidth(325);
         connectSeparator.setStyle("-fx-background-color: #fff; -fx-opacity: 50%;");
 
-        Label usernameLabel = new Label("Adresse mail");
+        Label usernameLabel = new Label("Nom d'utilisateur");
         GridPane.setVgrow(usernameLabel, Priority.ALWAYS);
         GridPane.setHgrow(usernameLabel, Priority.ALWAYS);
         GridPane.setValignment(usernameLabel, VPos.TOP);
@@ -232,11 +226,7 @@ public class Login extends Panel {
         forgotPassword.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         forgotPassword.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         forgotPassword.setOnMouseClicked(e -> {
-            if (connectWithMicrosoft.get()) {
-                openURL("https://account.live.com/ResetPassword.aspx");
-            } else {
-                openURL(Constants.WEB_URL + "login");
-            }
+            openURL(Constants.WEB_URL + "login");
         });
 
         Label errorLabel = new Label("");
@@ -260,35 +250,13 @@ public class Login extends Panel {
         conectionButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         conectionButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         conectionButton.setOnMouseClicked(e -> {
-            errorLabel.setText(" ");
-            if (connectWithMicrosoft.get()) {
-                conectionButton.setDisable(true);
-                if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-                    errorLabel.setText("Champ Incomplet");
-                    conectionButton.setDisable(false);
-                } else {
-                   authMicrosoft.login(usernameField.getText(), passwordField.getText(), errorLabel);
-                    if (authMicrosoft.isConnected()) {
-                        logger.info("Hello " + Launcher.getInstance().getAuthInfos().getUsername() + " !");
-                        panelManager.showPanel(new App());
-                    } else {
-                        conectionButton.setDisable(false);
-                    }
-                }
+            conectionButton.setDisable(true);
+
+            if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+                errorLabel.setText("Champ Incomplet");
+                conectionButton.setDisable(false);
             } else {
-                conectionButton.setDisable(true);
-                if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-                    errorLabel.setText("Champ Incomplet");
-                    conectionButton.setDisable(false);
-                } else {
-                    authMineweb.login(usernameField.getText(), passwordField.getText(), errorLabel);
-                    if (authMineweb.isConnected()){
-                        logger.info("Hello " + Launcher.getInstance().getAuthInfos().getUsername() + " !");
-                        panelManager.showPanel(new App());
-                    } else {
-                        conectionButton.setDisable(false);
-                    }
-                }
+                authMineweb.login(usernameField.getText(), passwordField.getText(), this.panelManager, errorLabel);
             }
         });
 
@@ -302,7 +270,7 @@ public class Login extends Panel {
         choseConnectSeparator.setMaxWidth(325);
         choseConnectSeparator.setStyle("-fx-opacity: 40%;");
 
-        Button choseConnexion = new Button("CONNEXION AVEC");
+        Button choseConnexion = new Button("OU");
         GridPane.setVgrow(choseConnexion, Priority.ALWAYS);
         GridPane.setHgrow(choseConnexion, Priority.ALWAYS);
         GridPane.setValignment(choseConnexion, VPos.CENTER);
@@ -312,11 +280,6 @@ public class Login extends Panel {
 
         Image logoImageMicrosoft = new Image("/images/Microsoft.png");
         ImageView imageViewMicrosoft = new ImageView(logoImageMicrosoft);
-
-        Image logoImageServer = new Image("/images/icon.png");
-        ImageView imageViewServer = new ImageView(logoImageServer);
-        imageViewServer.setFitHeight(34d);
-        imageViewServer.setPreserveRatio(true);
 
         Button microsoftButton = new Button("Microsoft");
         GridPane.setVgrow(microsoftButton, Priority.ALWAYS);
@@ -333,22 +296,7 @@ public class Login extends Panel {
         microsoftButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         microsoftButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         microsoftButton.setOnMouseClicked(e -> {
-            if (connectWithMicrosoft.get()) {
-                connectWithMicrosoft.set(false);
-                microsoftButton.setGraphic(imageViewServer);
-                microsoftButton.setText("SummumNetwork");
-                usernameLabel.setText("Nom d'utilisateur");
-                usernameField.setText("");
-                passwordLabel.setText("Mot de passe");
-                passwordField.setText("");
-            }else {
-                connectWithMicrosoft.set(true);
-                microsoftButton.setGraphic(imageViewMicrosoft);
-                microsoftButton.setText("Microsoft");
-                usernameLabel.setText("Adresse mail");
-                usernameField.setText("");
-                passwordField.setText("");
-            }
+            authMicrosoft.login(this.panelManager, errorLabel);
         });
 
         mainPanel.getChildren().addAll(connectLabel, connectSeparator, usernameLabel, usernameField, usernameSeparator,

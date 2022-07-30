@@ -5,8 +5,12 @@ import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import fr.summumgames.launcher.Launcher;
+import fr.summumgames.launcher.ui.PanelManager;
+import fr.summumgames.launcher.ui.panels.pages.App;
+import fr.summumgames.launcher.ui.panels.pages.Login;
 import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 /**
@@ -26,24 +30,26 @@ public class AuthMicrosoft {
 
     private ILogger logger = Launcher.getInstance().getLogger();
     private Saver saver = Launcher.getInstance().getSaver();
-
     private Boolean isConnected = false;
 
-    public void login(String username, String password, Label error) {
+    public void login(PanelManager panelManager, Label error) {
         MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
-        try {
-            MicrosoftAuthResult result = authenticator.loginWithCredentials(username, password);
-            this.saveCredentials(result);
 
-            this.saveAutInfos(result);
+        authenticator.loginWithAsyncWebview().whenComplete(((result, throwable) -> {
+            if (throwable != null) {
+                error.setText("Une erreur est survenue");
+            } else {
+                this.saveCredentials(result);
 
-            this.logger.info("Hello" + " " + result.getProfile().getName());
+                this.saveAutInfos(result);
 
-            this.isConnected = true;
-        } catch (MicrosoftAuthenticationException e) {
-            error.setText("Adresse mail ou mot de passe invalide");
-            return;
-        }
+                this.logger.info("Hello" + " " + result.getProfile().getName());
+
+                this.isConnected = true;
+
+                Platform.runLater( () -> { panelManager.showPanel(new App()); });
+            }
+        }));
     }
 
     public void saveCredentials(MicrosoftAuthResult result) {
