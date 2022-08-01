@@ -2,12 +2,10 @@ package fr.summumgames.launcher.auth;
 
 import fr.flowarg.flowlogger.ILogger;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import fr.summumgames.launcher.Launcher;
 import fr.summumgames.launcher.ui.PanelManager;
-import fr.summumgames.launcher.ui.panels.pages.App;
-import fr.summumgames.launcher.ui.panels.pages.Login;
+import fr.summumgames.launcher.ui.panels.pages.Home;
 import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.application.Platform;
@@ -47,7 +45,7 @@ public class AuthMicrosoft {
 
                 this.isConnected = true;
 
-                Platform.runLater( () -> { panelManager.showPanel(new App()); });
+                Platform.runLater( () -> { panelManager.showPanel(new Home()); });
             }
         }));
     }

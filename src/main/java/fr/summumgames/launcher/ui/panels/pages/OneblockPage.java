@@ -51,8 +51,8 @@ public class OneblockPage extends Panel {
     }
 
     public void showOneblockMenu() {
-        App.instance.setShowedMenu("oneblock");
-        App.instance.onShow();
+        Home.instance.setShowedMenu("oneblock");
+        Home.instance.onShow();
 
         backgroundImage.setStyle("-fx-background-image: url(images/background-skyblock.jpg);");
 
@@ -134,7 +134,7 @@ public class OneblockPage extends Panel {
         settingsButton.setOnMouseClicked(e -> {
             if (!minecraftLaunching.isDownloading()) {
                 pane.getChildren().clear();
-                App.instance.showSettingsPage();
+                Home.instance.showSettingsPage();
             }
         });
 

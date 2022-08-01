@@ -19,7 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *
@@ -55,8 +54,8 @@ public class SkyblockPage extends Panel {
     }
 
     public void showSkyblockMenu() {
-        App.instance.setShowedMenu("skyblock");
-        App.instance.onShow();
+        Home.instance.setShowedMenu("skyblock");
+        Home.instance.onShow();
 
         backgroundImage.setStyle("-fx-background-image: url(images/background-skyblock.jpg);");
 
@@ -138,7 +137,7 @@ public class SkyblockPage extends Panel {
         settingsButton.setOnMouseClicked(e -> {
             if (!minecraftLaunching.isDownloading()) {
                 pane.getChildren().clear();
-                App.instance.showSettingsPage();
+                Home.instance.showSettingsPage();
             }
         });
 

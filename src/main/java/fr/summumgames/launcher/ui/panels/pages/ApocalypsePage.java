@@ -50,8 +50,8 @@ public class ApocalypsePage extends Panel {
     }
 
     public void showApocalypseMenu() {
-        App.instance.setShowedMenu("apocalypse");
-        App.instance.onShow();
+        Home.instance.setShowedMenu("apocalypse");
+        Home.instance.onShow();
 
         backgroundImage.setStyle("-fx-background-image: url(images/background-skyblock.jpg);");
 
@@ -133,7 +133,7 @@ public class ApocalypsePage extends Panel {
         settingsButton.setOnMouseClicked(e -> {
             if (!minecraftLaunching.isDownloading()) {
                 pane.getChildren().clear();
-                App.instance.showSettingsPage();
+                Home.instance.showSettingsPage();
             }
         });
 

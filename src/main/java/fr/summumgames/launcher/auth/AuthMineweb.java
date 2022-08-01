@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import fr.flowarg.flowlogger.ILogger;
 import fr.summumgames.launcher.Launcher;
 import fr.summumgames.launcher.ui.PanelManager;
-import fr.summumgames.launcher.ui.panels.pages.App;
+import fr.summumgames.launcher.ui.panels.pages.Home;
 import fr.summumgames.launcher.utils.Constants;
 import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
@@ -20,7 +20,6 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -60,7 +59,7 @@ public class AuthMineweb {
                         setConnected(true);
                         saveCredentials();
                         saveAutInfos();
-                        Platform.runLater( () -> { panelManager.showPanel(new App()); });
+                        Platform.runLater( () -> { panelManager.showPanel(new Home()); });
                         break;
                     case "error_password":
                         errorLabel.setText("Nom d'utilisateur ou mot de passe invalide");

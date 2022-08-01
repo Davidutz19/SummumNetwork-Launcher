@@ -4,7 +4,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import fr.summumgames.launcher.Launcher;
 import fr.summumgames.launcher.ui.panel.Panel;
-import fr.summumgames.launcher.ui.panels.pages.App;
+import fr.summumgames.launcher.ui.panels.pages.Home;
 import fr.summumgames.launcher.ui.panels.pages.Login;
 import fr.summumgames.launcher.ui.panels.pages.SkyblockPage;
 import fr.summumgames.launcher.utils.Constants;
@@ -42,7 +42,7 @@ public class PlayerBar extends Panel {
 
     }
 
-    public void showPlayerBar(GridPane pane, GridPane appPane, SkyblockPage skyblockPage, App app) {
+    public void showPlayerBar(GridPane pane, GridPane appPane, SkyblockPage skyblockPage, Home home) {
 
         Separator blueLeftSeparator = new Separator();
         GridPane.setVgrow(blueLeftSeparator, Priority.ALWAYS);
@@ -106,7 +106,7 @@ public class PlayerBar extends Panel {
             saver.remove("offline-username");
             saver.save();
             Launcher.getInstance().setAuthInfos(null);
-            app.panelManager.showPanel(new Login());
+            home.panelManager.showPanel(new Login());
         });
 
         pane.getChildren().addAll(blueLeftSeparator, avatarView, playerNameLabel, logoutButton);

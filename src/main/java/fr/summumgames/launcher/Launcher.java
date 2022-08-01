@@ -3,7 +3,7 @@ package fr.summumgames.launcher;
 import fr.summumgames.launcher.auth.AuthMineweb;
 import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
-import fr.summumgames.launcher.ui.panels.pages.App;
+import fr.summumgames.launcher.ui.panels.pages.Home;
 import fr.summumgames.launcher.ui.panels.pages.Login;
 import fr.summumgames.launcher.utils.Constants;
 import fr.flowarg.flowlogger.ILogger;
@@ -69,7 +69,7 @@ public class Launcher extends Application {
 
         if (this.isUserAlreadyLoggedIn()) {
             logger.info("Hello " + authInfos.getUsername() + " !");
-            panelManager.showPanel(new App());
+            panelManager.showPanel(new Home());
         }else {
             this.panelManager.showPanel(new Login());
         }

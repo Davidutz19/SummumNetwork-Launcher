@@ -2,7 +2,7 @@ package fr.summumgames.launcher.ui.panels.partials;
 
 import fr.summumgames.launcher.Launcher;
 import fr.summumgames.launcher.ui.panel.Panel;
-import fr.summumgames.launcher.ui.panels.pages.App;
+import fr.summumgames.launcher.ui.panels.pages.Home;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
@@ -46,28 +46,28 @@ public class ServerList extends Panel {
             switch (saver.get("serverSelector")) {
                 case "skyblock":
                     serverLeftSeparator.setTranslateY(0);
-                    App.instance.showSkyblockPage();
+                    Home.instance.showSkyblockPage();
                     break;
                 case "survival":
                     serverLeftSeparator.setTranslateY(65);
-                    App.instance.showSurvivalPage();
+                    Home.instance.showSurvivalPage();
                     break;
                 case "apocalypse":
                     serverLeftSeparator.setTranslateY(130);
-                    App.instance.showApocalypsePage();
+                    Home.instance.showApocalypsePage();
                     break;
                 case "oneblock":
                     serverLeftSeparator.setTranslateY(195);
-                    App.instance.showOneblockPage();
+                    Home.instance.showOneblockPage();
                     break;
                 default:
                     serverLeftSeparator.setTranslateY(0);
-                    App.instance.showSkyblockPage();
+                    Home.instance.showSkyblockPage();
                     break;
             }
         } catch (NullPointerException e) {
             serverLeftSeparator.setTranslateY(0);
-            App.instance.showSkyblockPage();
+            Home.instance.showSkyblockPage();
         }
 
         ImageView skyblockView = new ImageView();
@@ -94,7 +94,7 @@ public class ServerList extends Panel {
         skyblockLabel.setOnMouseClicked(e -> {
             serverLeftSeparator.setTranslateY(0);
             centerPane.getChildren().clear();
-            App.instance.showSkyblockPage();
+            Home.instance.showSkyblockPage();
             saver.set("serverSelector", "skyblock");
             saver.save();
         });
@@ -125,7 +125,7 @@ public class ServerList extends Panel {
         survivalLabel.setOnMouseClicked(e -> {
             serverLeftSeparator.setTranslateY(65);
             centerPane.getChildren().clear();
-            App.instance.showSurvivalPage();
+            Home.instance.showSurvivalPage();
             saver.set("serverSelector", "survival");
             saver.save();
         });
@@ -157,7 +157,7 @@ public class ServerList extends Panel {
             serverLeftSeparator.setTranslateY(130);
             saver.set("serverSelector", "apocalypse");
             centerPane.getChildren().clear();
-            App.instance.showApocalypsePage();
+            Home.instance.showApocalypsePage();
             saver.save();
         });
 
@@ -188,7 +188,7 @@ public class ServerList extends Panel {
             serverLeftSeparator.setTranslateY(195);
             saver.set("serverSelector", "oneblock");
             centerPane.getChildren().clear();
-            App.instance.showOneblockPage();
+            Home.instance.showOneblockPage();
             saver.save();
         });
 

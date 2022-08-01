@@ -50,8 +50,8 @@ public class SurvivalPage extends Panel {
     }
 
     public void showSurvivalMenu() {
-        App.instance.setShowedMenu("survival");
-        App.instance.onShow();
+        Home.instance.setShowedMenu("survival");
+        Home.instance.onShow();
 
         backgroundImage.setStyle("-fx-background-image: url(images/background-skyblock.jpg);");
 
@@ -133,7 +133,7 @@ public class SurvivalPage extends Panel {
         settingsButton.setOnMouseClicked(e -> {
             if (!minecraftLaunching.isDownloading()) {
                 pane.getChildren().clear();
-                App.instance.showSettingsPage();
+                Home.instance.showSettingsPage();
             }
         });
 

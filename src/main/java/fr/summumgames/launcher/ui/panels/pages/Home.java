@@ -1,31 +1,18 @@
 package fr.summumgames.launcher.ui.panels.pages;
 
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import fr.summumgames.launcher.Launcher;
-import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panel.Panel;
 import fr.summumgames.launcher.ui.panels.partials.PlayerBar;
 import fr.summumgames.launcher.ui.panels.partials.ServerList;
-import fr.summumgames.launcher.utils.Constants;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import oshi.SystemInfo;
-import oshi.hardware.GlobalMemory;
-
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -40,9 +27,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  **/
 
-public class App extends Panel {
+public class Home extends Panel {
 
-    public static App instance;
+    public static Home instance;
     protected GridPane centerPane = new GridPane();
     protected GridPane appPane = new GridPane();
     //    private GridPane topPanel = new GridPane();

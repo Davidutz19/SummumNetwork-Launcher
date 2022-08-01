@@ -42,8 +42,8 @@ public class SettingsPage extends Panel {
     }
 
     public void showSettingsMenu() {
-        App.instance.setShowedMenu("settingsMenu");
-        App.instance.onShow();
+        Home.instance.setShowedMenu("settingsMenu");
+        Home.instance.onShow();
 
         Label title = new Label("Paramètre du Launcher");
         GridPane.setVgrow(title, Priority.ALWAYS);
@@ -216,19 +216,19 @@ public class SettingsPage extends Panel {
             if (saver.get("serverSelector") == null) saver.set("serverSelector", "");
             switch (saver.get("serverSelector")) {
                 case "skyblock":
-                    App.instance.showSkyblockPage();
+                    Home.instance.showSkyblockPage();
                     break;
                 case "survival":
-                    App.instance.showSurvivalPage();
+                    Home.instance.showSurvivalPage();
                     break;
                 case "apocalypse":
-                    App.instance.showApocalypsePage();
+                    Home.instance.showApocalypsePage();
                     break;
                 case "oneblock":
-                    App.instance.showOneblockPage();
+                    Home.instance.showOneblockPage();
                     break;
                 default:
-                    App.instance.showSkyblockPage();
+                    Home.instance.showSkyblockPage();
                     break;
             }
         });
