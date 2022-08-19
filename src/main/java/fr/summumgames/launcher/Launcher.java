@@ -1,5 +1,6 @@
 package fr.summumgames.launcher;
 
+import fr.summumgames.launcher.api.LauncherAPI;
 import fr.summumgames.launcher.auth.AuthMineweb;
 import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
@@ -18,6 +19,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -44,7 +47,7 @@ public class Launcher extends Application {
     private final Path apocalypseDir = launcherDir.resolve("Apocalypse");
     private final Path oneblockDir = launcherDir.resolve("Oneblock");
     private final Saver saver;
-
+    private final LauncherAPI launcherAPI;
     private AuthInfos authInfos = null;
 
     public Launcher() {
@@ -59,6 +62,14 @@ public class Launcher extends Application {
         saver = new Saver(Paths.get(launcherDir.toString(), "config.properties"));
 
         saver.load();
+
+        try {
+            launcherAPI = new LauncherAPI();
+
+        } catch (Exception e) {
+            //TODO CREATE ERROR MESSAGE AND CLOSE LAUNCHER
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -156,6 +167,10 @@ public class Launcher extends Application {
 
     public Path getOneblockDir() {
         return oneblockDir;
+    }
+
+    public LauncherAPI getLauncherAPI() {
+        return launcherAPI;
     }
 
     public void Stop() {

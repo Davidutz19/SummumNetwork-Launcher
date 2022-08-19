@@ -4,7 +4,6 @@ import fr.flowarg.flowupdater.FlowUpdater;
 import fr.flowarg.flowupdater.download.DownloadList;
 import fr.flowarg.flowupdater.download.IProgressCallback;
 import fr.flowarg.flowupdater.download.Step;
-import fr.flowarg.flowupdater.download.json.CurseFileInfo;
 import fr.flowarg.flowupdater.download.json.Mod;
 import fr.flowarg.flowupdater.download.json.OptiFineInfo;
 import fr.flowarg.flowupdater.utils.ModFileDeleter;
@@ -14,7 +13,7 @@ import fr.flowarg.flowupdater.versions.ForgeVersionBuilder;
 import fr.flowarg.flowupdater.versions.VanillaVersion;
 import fr.flowarg.openlauncherlib.NewForgeVersionDiscriminator;
 import fr.summumgames.launcher.Launcher;
-import fr.summumgames.launcher.enums.Urls;
+import fr.summumgames.launcher.enums.ModsUrls;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.utils.Constants;
 import fr.theshark34.openlauncherlib.external.ExternalLaunchProfile;
@@ -84,8 +83,7 @@ public class MinecraftLaunching {
                     minecraftInfos.GAME_VERSION,
                     "20210115.111550"
             );
-            minecraftInfos.CURSE_MODS_LIST_URL = Urls.SKYBLOCK_MAIN_MODS.getUrl();
-            minecraftInfos.MODS_LIST_URL = Urls.SKYBLOCK_MAIN_MODS.getUrl();
+            minecraftInfos.MODS_LIST_URL = ModsUrls.SKYBLOCK_MODS.getUrl();
             play(pane);
         }
         else if (serverName.contains("survival")) {
@@ -163,21 +161,19 @@ public class MinecraftLaunching {
             final UpdaterOptions options = new UpdaterOptions.UpdaterOptionsBuilder()
                     .build();
 
-            List<CurseFileInfo> curseMods = null;
             List<Mod> mods = null;
 
             if (serverName.contains("skyblock")) {
-                curseMods = CurseFileInfo.getFilesFromJson(minecraftInfos.CURSE_MODS_LIST_URL);
                 mods = Mod.getModsFromJson(minecraftInfos.MODS_LIST_URL);
 
                 //Optional Mod
                 if (saver.get("skyblockOptionalReplaymod") != null && saver.get("skyblockOptionalReplaymod").equals("true")) {
-                    for (Mod m : Mod.getModsFromJson(Urls.SKYBLOCK_REPLAYMOD.getUrl())) {
+                    for (Mod m : Mod.getModsFromJson(ModsUrls.SKYBLOCK_REPLAYMOD.getUrl())) {
                         mods.add(m);
                     }
                 }
                 if (saver.get("skyblockOptionalLitematica") != null && saver.get("skyblockOptionalLitematica").equals("true")) {
-                    for (Mod m : Mod.getModsFromJson(Urls.SKYBLOCK_LITEMATICA.getUrl())) {
+                    for (Mod m : Mod.getModsFromJson(ModsUrls.SKYBLOCK_LITEMATICA.getUrl())) {
                         mods.add(m);
                     }
                 }
@@ -187,7 +183,6 @@ public class MinecraftLaunching {
             final AbstractForgeVersion forge = new ForgeVersionBuilder(minecraftInfos.FORGE_VERSION_TYPE)
                     .withOptiFine(new OptiFineInfo(minecraftInfos.OPTIFINE_VERSION, false))
                     .withForgeVersion(minecraftInfos.FORGE_VERSION)
-                    .withCurseMods(curseMods)
                     .withMods(mods)
                     .withFileDeleter(new ModFileDeleter(true))
                     .build();
