@@ -141,7 +141,7 @@ public class Login extends Panel {
         connectSeparator.setMaxWidth(325);
         connectSeparator.setStyle("-fx-background-color: #fff; -fx-opacity: 50%;");
 
-        Label emailLabel = new Label("Address mail");
+        Label emailLabel = new Label("Adresse mail");
         GridPane.setVgrow(emailLabel, Priority.ALWAYS);
         GridPane.setHgrow(emailLabel, Priority.ALWAYS);
         GridPane.setValignment(emailLabel, VPos.TOP);

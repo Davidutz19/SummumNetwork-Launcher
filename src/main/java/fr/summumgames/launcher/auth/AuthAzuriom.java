@@ -34,6 +34,12 @@ public class AuthAzuriom {
     private Boolean isConnected = false;
 
     public void login(PanelManager panelManager, String email, String password, Button connect, Label error) {
+        if (!email.contains("@")) {
+            connect.setDisable(false);
+            error.setText("Veuillez saisir une adresse mail");
+            return;
+        }
+
         AuthClient authenticator = new AuthClient("http://192.168.0.113");
         try {
             AuthInfos authInfos = authenticator.login(email, password, () -> {

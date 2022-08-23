@@ -1,11 +1,9 @@
 package fr.summumgames.launcher;
 
 import fr.summumgames.launcher.api.LauncherAPI;
-import fr.summumgames.launcher.auth.AuthMineweb;
 import com.azuriom.azauth.AuthClient;
 import com.azuriom.azauth.exception.AuthException;
 import com.azuriom.azauth.model.User;
-import fr.summumgames.launcher.auth.AuthAzuriom;
 import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panels.pages.Home;
