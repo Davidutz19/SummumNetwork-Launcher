@@ -2,6 +2,10 @@ package fr.summumgames.launcher;
 
 import fr.summumgames.launcher.api.LauncherAPI;
 import fr.summumgames.launcher.auth.AuthMineweb;
+import com.azuriom.azauth.AuthClient;
+import com.azuriom.azauth.exception.AuthException;
+import com.azuriom.azauth.model.User;
+import fr.summumgames.launcher.auth.AuthAzuriom;
 import fr.summumgames.launcher.game.MinecraftLaunching;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panels.pages.Home;
@@ -114,17 +118,33 @@ public class Launcher extends Application {
                 saver.save();
             }
 
-        }else if (saver.get("offline-username") != null && saver.get("offline-accessToken") != null) {
-            AuthMineweb authMineweb = new AuthMineweb();
+        }else if (saver.get("az-uuid") != null && saver.get("az-username") != null && saver.get("az-accessToken") != null) {
+            AuthClient authenticator = new AuthClient("http://192.168.0.113");
 
-            if (saver.get("offline-username").equals(authMineweb.getNameWithToken(saver.get("offline-accessToken")))) {
-                this.authInfos = new AuthInfos(saver.get("offline-username"), saver.get("offline-accessToken"), saver.get("offline-uuid"));
+            try {
+                User azUser = authenticator.verify(saver.get("az-accessToken"));
+
+                saver.remove("msAccessToken");
+                saver.remove("msRefreshToken");
+                saver.set("az-username", azUser.getUsername());
+                saver.set("az-accessToken", azUser.getAccessToken());
+                saver.set("az-uuid", String.valueOf(azUser.getId()));
+                saver.save();
+
+                this.setAuthInfos(new AuthInfos(
+                        azUser.getUsername(),
+                        azUser.getAccessToken(),
+                        String.valueOf(azUser.getId())
+                ));
+
                 return true;
-            } else {
-                saver.remove("offline-username");
-                saver.remove("offline-accessToken");
-                saver.remove("offline-uuid");
+
+            } catch (AuthException e) {
+                saver.remove("az-username");
+                saver.remove("az-accessToken");
+                saver.remove("az-uuid");
             }
+
         }
         return false;
     }
@@ -141,7 +161,7 @@ public class Launcher extends Application {
         return logger;
     }
 
-    public static Launcher getInstance()     {
+    public static Launcher getInstance() {
         return instance;
     }
 

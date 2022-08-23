@@ -1,20 +1,11 @@
 package fr.summumgames.launcher.ui.panels.pages;
 
-import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import fr.summumgames.launcher.Launcher;
 import fr.summumgames.launcher.auth.AuthMicrosoft;
-import fr.summumgames.launcher.auth.AuthMineweb;
+import fr.summumgames.launcher.auth.AuthAzuriom;
 import fr.summumgames.launcher.ui.PanelManager;
 import fr.summumgames.launcher.ui.panel.Panel;
-import fr.litarvan.openauth.AuthPoints;
-import fr.litarvan.openauth.AuthenticationException;
-import fr.litarvan.openauth.Authenticator;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
-import fr.litarvan.openauth.model.AuthAgent;
-import fr.litarvan.openauth.model.response.AuthResponse;
 import fr.summumgames.launcher.utils.Constants;
-import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -32,13 +23,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *
@@ -58,7 +46,7 @@ public class Login extends Panel {
     Saver saver = Launcher.getInstance().getSaver();
 
     AuthMicrosoft authMicrosoft = new AuthMicrosoft();
-    AuthMineweb authMineweb = new AuthMineweb();
+    AuthAzuriom authAzuriom = new AuthAzuriom();
 
     @Override
     public String getName() {
@@ -70,7 +58,7 @@ public class Login extends Panel {
         return "css/login.css";
     }
 
-    TextField usernameField = new TextField("");
+    TextField emailField = new TextField("");
     private final Button conectionButton = new Button("Se connecter");
 
     @Override
@@ -153,24 +141,24 @@ public class Login extends Panel {
         connectSeparator.setMaxWidth(325);
         connectSeparator.setStyle("-fx-background-color: #fff; -fx-opacity: 50%;");
 
-        Label usernameLabel = new Label("Nom d'utilisateur");
-        GridPane.setVgrow(usernameLabel, Priority.ALWAYS);
-        GridPane.setHgrow(usernameLabel, Priority.ALWAYS);
-        GridPane.setValignment(usernameLabel, VPos.TOP);
-        GridPane.setHalignment(usernameLabel, HPos.LEFT);
-        usernameLabel.setStyle("-fx-text-fill: #95bad3; -fx-font-size: 14px;");
-        usernameLabel.setTranslateY(110);
-        usernameLabel.setTranslateX(37.5);
+        Label emailLabel = new Label("Address mail");
+        GridPane.setVgrow(emailLabel, Priority.ALWAYS);
+        GridPane.setHgrow(emailLabel, Priority.ALWAYS);
+        GridPane.setValignment(emailLabel, VPos.TOP);
+        GridPane.setHalignment(emailLabel, HPos.LEFT);
+        emailLabel.setStyle("-fx-text-fill: #95bad3; -fx-font-size: 14px;");
+        emailLabel.setTranslateY(110);
+        emailLabel.setTranslateX(37.5);
 
-        GridPane.setVgrow(usernameField, Priority.ALWAYS);
-        GridPane.setHgrow(usernameField, Priority.ALWAYS);
-        GridPane.setValignment(usernameField, VPos.TOP);
-        GridPane.setHalignment(usernameField, HPos.LEFT);
-        usernameField.setStyle("-fx-background-color: #1e1e1e; -fx-font-size: 16px; -fx-text-fill: #e5e5e5;");
-        usernameField.setMaxWidth(325);
-        usernameField.setMaxHeight(40);
-        usernameField.setTranslateX(37.5);
-        usernameField.setTranslateY(140);
+        GridPane.setVgrow(emailField, Priority.ALWAYS);
+        GridPane.setHgrow(emailField, Priority.ALWAYS);
+        GridPane.setValignment(emailField, VPos.TOP);
+        GridPane.setHalignment(emailField, HPos.LEFT);
+        emailField.setStyle("-fx-background-color: #1e1e1e; -fx-font-size: 16px; -fx-text-fill: #e5e5e5;");
+        emailField.setMaxWidth(325);
+        emailField.setMaxHeight(40);
+        emailField.setTranslateX(37.5);
+        emailField.setTranslateY(140);
 
         Separator usernameSeparator = new Separator();
         GridPane.setVgrow(usernameSeparator, Priority.ALWAYS);
@@ -252,11 +240,11 @@ public class Login extends Panel {
         conectionButton.setOnMouseClicked(e -> {
             conectionButton.setDisable(true);
 
-            if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+            if (emailField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                 errorLabel.setText("Champ Incomplet");
                 conectionButton.setDisable(false);
             } else {
-                authMineweb.login(usernameField.getText(), passwordField.getText(), this.panelManager, errorLabel);
+                authAzuriom.login(this.panelManager, emailField.getText(), passwordField.getText(), conectionButton, errorLabel);
             }
         });
 
@@ -299,7 +287,7 @@ public class Login extends Panel {
             authMicrosoft.login(this.panelManager, errorLabel);
         });
 
-        mainPanel.getChildren().addAll(connectLabel, connectSeparator, usernameLabel, usernameField, usernameSeparator,
+        mainPanel.getChildren().addAll(connectLabel, connectSeparator, emailLabel, emailField, usernameSeparator,
                 passwordLabel, passwordField, passwordSeparator, forgotPassword, errorLabel,
                 conectionButton, choseConnectSeparator, choseConnexion, microsoftButton);
         GridPane.setHalignment(mainPanel, HPos.CENTER);
