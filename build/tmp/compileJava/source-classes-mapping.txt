@@ -28,25 +28,25 @@ fr/summumgames/launcher/ui/panels/pages/SurvivalPage.java
  fr.summumgames.launcher.ui.panels.pages.SurvivalPage
 fr/summumgames/launcher/ui/panels/pages/SkyblockPage.java
  fr.summumgames.launcher.ui.panels.pages.SkyblockPage
-fr/summumgames/launcher/Launcher.java
- fr.summumgames.launcher.Launcher
+fr/summumgames/launcher/auth/AuthAzuriom.java
+ fr.summumgames.launcher.auth.AuthAzuriom
 fr/summumgames/launcher/Main.java
  fr.summumgames.launcher.Main
 fr/summumgames/launcher/ui/panels/pages/OneblockPage.java
  fr.summumgames.launcher.ui.panels.pages.OneblockPage
-fr/summumgames/launcher/ui/panels/partials/PlayerBar.java
- fr.summumgames.launcher.ui.panels.partials.PlayerBar
+fr/summumgames/launcher/ui/panels/pages/SettingsPage.java
+ fr.summumgames.launcher.ui.panels.pages.SettingsPage
 fr/summumgames/launcher/ui/panel/Panel.java
  fr.summumgames.launcher.ui.panel.Panel
 fr/summumgames/launcher/game/MinecraftLaunching.java
  fr.summumgames.launcher.game.MinecraftLaunching
  fr.summumgames.launcher.game.MinecraftLaunching$1
  fr.summumgames.launcher.game.MinecraftLaunching$StepInfo
+fr/summumgames/launcher/Launcher.java
+ fr.summumgames.launcher.Launcher
 fr/summumgames/launcher/ui/panels/pages/Login.java
  fr.summumgames.launcher.ui.panels.pages.Login
-fr/summumgames/launcher/ui/panels/pages/SettingsPage.java
- fr.summumgames.launcher.ui.panels.pages.SettingsPage
+fr/summumgames/launcher/ui/panels/partials/PlayerBar.java
+ fr.summumgames.launcher.ui.panels.partials.PlayerBar
 fr/summumgames/launcher/ui/panels/pages/Home.java
  fr.summumgames.launcher.ui.panels.pages.Home
-fr/summumgames/launcher/auth/AuthMineweb.java
- fr.summumgames.launcher.auth.AuthMineweb

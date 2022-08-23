@@ -99,11 +99,11 @@ public class PlayerBar extends Panel {
                 return;
             }
 
-            saver.remove("accesToken");
-            saver.remove("clientToken");
             saver.remove("msAccessToken");
             saver.remove("msRefreshToken");
-            saver.remove("offline-username");
+            saver.remove("az-username");
+            saver.remove("az-accessToken");
+            saver.remove("az-uuid");
             saver.save();
             Launcher.getInstance().setAuthInfos(null);
             home.panelManager.showPanel(new Login());
@@ -113,8 +113,8 @@ public class PlayerBar extends Panel {
     }
 
     public String avatarUrl() {
-        if (saver.get("offline-username") != null) {
-            return Constants.AVATAR_URL + "MHF_STEVE";
+        if (saver.get("az-username") != null) {
+            return "http://192.168.0.113/api/skin-api/avatars/face/" + saver.get("az-uuid");
         } else {
             return Constants.AVATAR_URL + Launcher.getInstance().getAuthInfos().getUuid();
         }
