@@ -22,9 +22,9 @@ Les derniers version son disponibles sur l'updater
 
 | Platform | Status |
 | -------- | ---- |
-| Windows x64 | <a href="https://download.summum-network.net/win/updater.exe"><img src="https://img.shields.io/badge/Disponible-OUI-green" ></a> |
-| macOS |  <a href="https://download.summum-network.net/mac/updater.dmg"><img src="https://img.shields.io/badge/Disponible-NON-red" alt="build"></a> |
-| Linux x64 |  <a href="https://download.summum-network.net/linux/updater.appImage"><img src="https://img.shields.io/badge/Disponible-OUI-green" alt="build"></a> |
+| Windows x64 | <a href="https://www.summum-network.net/launcher"><img src="https://img.shields.io/badge/Disponible-OUI-green" ></a> |
+| macOS |  <a href="https://www.summum-network.net/launcher"><img src="https://img.shields.io/badge/Disponible-NON-red" alt="build"></a> |
+| Linux x64 |  <a href="https://www.summum-network.net/launcher"><img src="https://img.shields.io/badge/Disponible-OUI-green" alt="build"></a> |
 
 ---
 Copyright 2022 SummumNetwork©. All rights reserved.
