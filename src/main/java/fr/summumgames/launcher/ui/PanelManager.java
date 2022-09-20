@@ -43,7 +43,7 @@ public class PanelManager {
     }
 
     public void init() {
-        this.stage.setTitle(Constants.LAUNCHER_NAME);
+        this.stage.setTitle(Constants.LAUNCHER_NAME + " - DEV");
         this.stage.setMinWidth(854);
         this.stage.setMinHeight(480);
         this.stage.setWidth(1280);

@@ -261,11 +261,14 @@ public class MinecraftLaunching {
         try {
             ExternalLaunchProfile profile = MinecraftLauncher.createExternalProfile(infos, GameFolder.FLOW_UPDATER, Launcher.getInstance().getAuthInfos());
             profile.getVmArgs().add(this.getRamArgsFromSaver());
+            profile.getVmArgs().add("-Dfml.earlyprogresswindow=false");
             ExternalLauncher launcher = new ExternalLauncher(profile);
 
-            Platform.runLater(() -> panelManager.getStage().hide());
-
             Process p = launcher.launch();
+
+            Thread.sleep(5000);
+
+            Platform.runLater(() -> panelManager.getStage().hide());
 
             Platform.runLater(() -> {
                 try {
@@ -274,6 +277,7 @@ public class MinecraftLaunching {
                     e.printStackTrace();
                 }
             });
+
         } catch (Exception exception) {
             exception.printStackTrace();
             Launcher.getInstance().getLogger().err(exception.toString());
